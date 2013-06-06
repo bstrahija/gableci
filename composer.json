@@ -1,0 +1,38 @@
+{
+	"require": {
+		"laravel/framework": "4.0.*",
+		"cartalyst/sentry": "2.0.*",
+		"imagine/Imagine": "v0.4.1",
+		"edvinaskrucas/notification": "1.*",
+		"loic-sharma/profiler": "dev-master",
+		"fabpot/goutte": "1.0.*",
+		"barryvdh/laravel-vendor-cleanup": "dev-master"
+	},
+	"autoload": {
+		"classmap": [
+			"app/commands",
+			"app/controllers",
+			"app/models",
+			"app/database/migrations",
+			"app/database/seeds",
+			"app/tests/TestCase.php",
+			"app/services",
+			"app/facades"
+		]
+	},
+	"scripts": {
+		"pre-update-cmd": [
+			"php artisan clear-compiled"
+		],
+		"post-install-cmd": [
+			"php artisan optimize"
+		],
+		"post-update-cmd": [
+			"php artisan optimize"
+		]
+	},
+	"config": {
+		"preferred-install": "dist"
+	},
+	"minimum-stability": "dev"
+}

@@ -1,0 +1,6 @@
+table td form { margin: 0; padding: 0; }
+table td input[type=text], table td .input-append { margin: 0; }
+table td.name { width: 75%; }
+table td.name input { width: 98%; }
+table td.price { width: 8%; }
+table td.price input { width: 60px; text-align: right; }

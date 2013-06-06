@@ -1,0 +1,7 @@
+/app/database/seeds/SentrySeederReal.php
+/app/config/production
+/bootstrap/compiled.php
+/vendor
+composer.phar
+composer.lock
+.DS_Store
