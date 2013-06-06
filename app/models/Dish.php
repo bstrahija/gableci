@@ -39,7 +39,11 @@ class Dish extends \Eloquent {
 
 		if ($dish)
 		{
-			return "[{$dish->code}] " . $dish->title . " / " . $dish->price . "kn";
+			$title  = "[{$dish->code}]";
+			$title .= $dish->title ? " {$dish->title} " : ' ---';
+			$title .= $dish->price ? " / {$dish->price} kn" : null;
+
+			return $title;
 		}
 
 		return $code;
