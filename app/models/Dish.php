@@ -74,6 +74,7 @@ class Dish extends \Eloquent {
 		// Now get all dishes for today
 		$dishes = self::where('created_at', '>=', date('Y-m-d') . ' 00:00:00')
 		              ->where('created_at', '<=', date('Y-m-d') . ' 23:59:59')
+		              ->orderBy('code')
 		              ->get();
 
 		return $dishes;

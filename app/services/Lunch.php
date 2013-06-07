@@ -124,7 +124,7 @@ class Lunch {
 			// Cache the results
 			if ($this->flyers)
 			{
-				Cache::put('flyers', $this->flyers, 60);
+				Cache::put('flyers', $this->flyers, 60*3);
 			}
 		}
 		else

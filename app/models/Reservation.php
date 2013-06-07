@@ -1,5 +1,7 @@
 <?php namespace App\Models;
 
+use Dish;
+
 class Reservation extends \Eloquent {
 
 	public $table = 'reservations';
@@ -35,6 +37,23 @@ class Reservation extends \Eloquent {
 		                           ->get();
 
 		return $reservations;
+	}
+
+	public static function getTotalPrice()
+	{
+		$total        = 0;
+		$reservations = self::getForToday();
+
+		if ($reservations)
+		{
+			foreach ($reservations as $reservation)
+			{
+				$dish   = Dish::getByCode($reservation->dish);
+				$total += $dish->price;
+			}
+		}
+
+		return $total;
 	}
 
 }

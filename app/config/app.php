@@ -115,7 +115,7 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 
 		// ! Required services
-		'Profiler\ProfilerServiceProvider',
+		// 'Profiler\ProfilerServiceProvider',
 		'Cartalyst\Sentry\SentryServiceProvider',
 		'Krucas\Notification\NotificationServiceProvider',
 		'Barryvdh\VendorCleanup\VendorCleanupServiceProvider',
@@ -191,6 +191,7 @@ return array(
 		'Lunch'        => 'App\Facades\LunchFacade',
 		'Notification' => 'Krucas\Notification\Facades\Notification',
 		'Profiler'     => 'Profiler\Facades\Profiler',
+		'Reservation'  => 'App\Models\Reservation',
 		'Sentry'       => 'Cartalyst\Sentry\Facades\Laravel\Sentry',
 	),
 

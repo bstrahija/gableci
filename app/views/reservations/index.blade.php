@@ -19,7 +19,7 @@
 						<label for="dish" class="control-label">Jelo</label>
 						<div class="controls">
 							{{ Form::select('dish', array(
-								'' => 'Pick one...',
+								'' => 'Biraj...',
 								1 => Dish::getTitleByCode(1),
 								2 => Dish::getTitleByCode(2),
 								3 => Dish::getTitleByCode(3),
@@ -70,6 +70,8 @@
 							@endforeach
 						</tbody>
 					</table>
+
+					<h3>Ukupno: <em>{{ Reservation::getTotalPrice() }} kn</em></h3>
 				@else
 					<div class="alert">Nema rezervacija</div>
 				@endif
