@@ -43,7 +43,7 @@ class Dish extends \Eloquent {
 			$title .= $dish->title ? " {$dish->title} " : ' ---';
 			$title .= $dish->price ? " / {$dish->price} kn" : null;
 
-			return $title;
+			return strip_tags($title);
 		}
 
 		return $code;

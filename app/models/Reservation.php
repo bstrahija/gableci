@@ -49,7 +49,8 @@ class Reservation extends \Eloquent {
 			foreach ($reservations as $reservation)
 			{
 				$dish   = Dish::getByCode($reservation->dish);
-				$total += $dish->price;
+
+				if ($dish) $total += $dish->price;
 			}
 		}
 

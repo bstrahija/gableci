@@ -15,7 +15,7 @@ class DishesController extends BaseController {
 	public function update($id)
 	{
 		$dish = Dish::find($id);
-		$dish->title = Input::get('title');
+		$dish->title = strip_tags(Input::get('title'));
 		$dish->price = Input::get('price');
 		$dish->save();
 
