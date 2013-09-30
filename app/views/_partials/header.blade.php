@@ -1,20 +1,18 @@
-<header>
-	<div class="wrap">
-		@if (Sentry::check() and isset($flyer) and $flyer)
-			<a href="{{ $flyer['href'] }}" class="lightbox dish-menu"><i class="glyphicon glyphicon-picture"></i> Meni</a>
-		@else
-			<a href="#" class="dish-menu dish-menu-missing" title="Greška!"><i class="glyphicon glyphicon-ban-circle"></i> Meni</a>
-		@endif
-
-		<h1><a href="{{ url('/') }}">Gableci</a></h1>
-
-		@if (Sentry::check())
-			<a href="#" onclick="window.location.reload(true); return false;" class="refresh"><i class="glyphicon glyphicon-refresh"></i></a>
-		@endif
-	</div>
-</header>
-
 @if (Sentry::check())
+	<header>
+		<div class="wrap">
+			@if (isset($flyer) and $flyer)
+				<a href="{{ $flyer['href'] }}" class="lightbox dish-menu"><i class="glyphicon glyphicon-picture"></i> Meni</a>
+			@else
+				<a href="#" class="dish-menu dish-menu-missing" title="Greška!"><i class="glyphicon glyphicon-ban-circle"></i> Meni</a>
+			@endif
+
+			<h1><a href="{{ url('/') }}">Gableci</a></h1>
+
+			<a href="#" onclick="window.location.reload(true); return false;" class="refresh"><i class="glyphicon glyphicon-refresh"></i></a>
+		</div>
+	</header>
+
 	<footer>
 		<nav>
 			<ul class="clearfix">

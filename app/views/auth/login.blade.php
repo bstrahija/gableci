@@ -6,7 +6,7 @@
 
 	<div id="login" class="login">
 
-		<h1>Gableci</h1>
+		<h1><i class="glyphicon glyphicon-cutlery"></i> Gableci</h1>
 
 		@if ($errors->has('login'))
 			<div class="alert alert-error">{{ $errors->first('login', ':message') }}</div>
