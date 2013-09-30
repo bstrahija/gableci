@@ -1,6 +1,6 @@
 <?php namespace App\Controllers;
 
-use Lunch, Stats, View;
+use Input, Lunch, Stats, View;
 
 class StatsController extends BaseController {
 
@@ -14,7 +14,7 @@ class StatsController extends BaseController {
 		$flyer = Lunch::flyer();
 
 		// Get list of spendings
-		$spent = Stats::spent();
+		$spent = Stats::spent(Input::get('range'));
 
 		return View::make('stats.index')->with('flyer', $flyer)->with('spent', $spent);
 	}
