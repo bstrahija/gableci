@@ -27,7 +27,7 @@
 		</div>
 
 		<div class="form-actions">
-			{{ Form::submit('Login', array('class' => 'btn btn-primary btn-login')) }}
+			{{ Form::submit('Login', array('class' => 'btn btn-primary btn-login btn-lg')) }}
 		</div>
 
 	</div>
