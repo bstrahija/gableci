@@ -2,7 +2,7 @@
 
 @section('main')
 	<div class="row">
-		<div class="span12">
+		<div class="content">
 			<h2>Današnja jela</h2>
 
 			@if ($dishes)

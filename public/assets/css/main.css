@@ -5,6 +5,7 @@
 body { font-size: 14px; font-family: "Helvetica Neue", Helvetica, sans-serif; padding: 40px 0 60px 0; }
 h2 { font-size: 20px; }
 .container { max-width: 800px; }
+.content { padding: 0 18px; }
 @media only screen and (max-width : 800px) {
 	.content { padding: 0 18px; }
 }

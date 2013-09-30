@@ -1,6 +1,10 @@
 $(function() {
 
-	$("a.lightbox").fancybox();
+	$("a.lightbox").fancybox({
+		padding: 0,
+		margin: 0,
+		closeClick: true
+	});
 
 
 	var reservationRefreshInterval = setInterval(function() {
