@@ -1,5 +1,6 @@
 /app/database/seeds/SentrySeederReal.php
 /app/config/production
+/app/storage/*
 /bootstrap/compiled.php
 /vendor
 composer.phar

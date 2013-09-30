@@ -1,12 +1,14 @@
 {
+	"name": "laravel/laravel",
+	"description": "The Laravel Framework.",
+	"keywords": ["framework", "laravel"],
 	"require": {
 		"laravel/framework": "4.0.*",
 		"cartalyst/sentry": "2.0.*",
 		"imagine/Imagine": "v0.4.1",
 		"edvinaskrucas/notification": "1.*",
-		"loic-sharma/profiler": "dev-master",
 		"fabpot/goutte": "1.0.*",
-		"barryvdh/laravel-vendor-cleanup": "dev-master"
+		"itsgoingd/clockwork": "dev-master"
 	},
 	"autoload": {
 		"classmap": [
@@ -20,14 +22,17 @@
 		]
 	},
 	"scripts": {
-		"pre-update-cmd": [
-			"php artisan clear-compiled"
-		],
 		"post-install-cmd": [
 			"php artisan optimize"
 		],
+		"pre-update-cmd": [
+			"php artisan clear-compiled"
+		],
 		"post-update-cmd": [
 			"php artisan optimize"
+		],
+		"post-create-project-cmd": [
+			"php artisan key:generate"
 		]
 	},
 	"config": {

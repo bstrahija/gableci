@@ -46,7 +46,18 @@ class Lunch {
 		if ( ! $date) $date = date('d.m.');
 
 		// Get the flyer
-		if (isset($this->flyers[$date])) return $this->flyers[$date];
+		if (isset($this->flyers[$date]))
+		{
+			return $this->flyers[$date];
+		}
+		else
+		{
+			// If no flyer is found , bust the cache and try again
+			Cache::forget('flyers');
+			$this->scrape();
+
+			if (isset($this->flyers[$date])) return $this->flyers[$date];
+		}
 	}
 
 	/**
@@ -58,7 +69,10 @@ class Lunch {
 	{
 		$flyer = $this->flyer($date);
 
-		if ($flyer and isset($flyer['href'])) return $flyer['href'];
+		if ($flyer and isset($flyer['href']))
+		{
+			return $flyer['href'];
+		}
 	}
 
 	/**

@@ -118,7 +118,7 @@ return array(
 		// 'Profiler\ProfilerServiceProvider',
 		'Cartalyst\Sentry\SentryServiceProvider',
 		'Krucas\Notification\NotificationServiceProvider',
-		'Barryvdh\VendorCleanup\VendorCleanupServiceProvider',
+		'Clockwork\Support\Laravel\ClockworkServiceProvider',
 
 	),
 
