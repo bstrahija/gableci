@@ -32,6 +32,10 @@
 
 	</div>
 
+	<p class="copy">
+		&copy; {{ date('Y') }} Gableci Inc.
+	</p>
+
 {{ Form::close() }}
 
 @stop
