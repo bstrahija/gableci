@@ -1,6 +1,7 @@
 <?php namespace App\Controllers;
 
-use App\Models\Reservation, Input, Lunch, Redirect, Request, Sentry, View;
+use App\Models\Reservation;
+use Input, Lunch, Redirect, Request, Sentry, View;
 
 class ReservationsController extends BaseController {
 

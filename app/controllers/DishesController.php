@@ -1,6 +1,7 @@
 <?php namespace App\Controllers;
 
-use App\Models\Dish, Input, Redirect, Sentry, View;
+use App\Models\Dish, App\Models\Reservation;
+use Input, Lunch, Redirect, Sentry, View;
 
 class DishesController extends BaseController {
 
@@ -8,8 +9,11 @@ class DishesController extends BaseController {
 	{
 		$dishes = Dish::getForToday();
 
+		// Get the flyer
+		$flyer = Lunch::flyer();
+
 		// Render view with data
-		return View::make('dishes.index')->with('dishes', $dishes);
+		return View::make('dishes.index')->with('dishes', $dishes)->with('flyer', $flyer);
 	}
 
 	public function update($id)
