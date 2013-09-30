@@ -20,12 +20,18 @@ class ReservationsController extends BaseController {
 		// Get today's reservations for everybody
 		$reservations = Reservation::getForToday();
 
+		// Get today's reservation overview
+		$overview = Reservation::getOverviewForToday();
+
+		// Get total price
+		$totalPrice = Reservation::getTotalPrice();
+
 		// Check for ajax request
 		if (Request::ajax()) $view = 'reservations.overview';
 		else                 $view = 'reservations.index';
 
 		// Render view with data
-		return View::make($view)->with(compact('flyer', 'myReservation', 'reservations'));
+		return View::make($view)->with(compact('flyer', 'myReservation', 'reservations', 'overview', 'totalPrice'));
 	}
 
 	public function postIndex()

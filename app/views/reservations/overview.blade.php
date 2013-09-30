@@ -1,5 +1,40 @@
 @if ($reservations)
+	<div class="complete-overview">
+		<h2 class="hd">Pregled rezervacija</h2>
+
+		<ul>
+			@foreach ($overview as $entry)
+				<li>
+					<strong>{{ $entry['count'] }}</strong> x
+					<em class="code"><i class="glyphicon glyphicon-cutlery"></i> {{ $entry['dish'] }}</em>
+					<em class="dish">{{ $entry['title'] }}</em>
+					<span class="price">{{ $entry['price'] }} kn</span>
+
+					@if (isset($entry['notes']) and $entry['notes'])
+						<p class="notes">
+							@foreach ($entry['notes'] as $note)
+								<i class="glyphicon glyphicon-bookmark"></i>
+								<i class="count">{{ $note['count'] }}</i>
+								x
+								<i class="text">{{ $note['text'] }}</i>
+								<br>
+							@endforeach
+						</p>
+					@endif
+				</li>
+			@endforeach
+		</ul>
+
+		<blockquote>
+			<p>Ukupno: <em>{{ $totalPrice }} kn</em></p>
+		</blockquote>
+	</div>
+
+	<hr>
+
 	<div class="reservation-overview">
+		<h2 class="hd">Sve rezervacije</h2>
+
 		<ul>
 			@foreach ($reservations as $reservation)
 				<li>
@@ -23,33 +58,8 @@
 		</ul>
 	</div>
 
-	<?php /* <table class="table table-striped table-bordered">
-		<thead>
-			<tr>
-				<th><i class="glyphicon glyphicon-user"></i></th>
-				<th><i class="glyphicon glyphicon-cutlery"></i></th>
-				<th><i class="glyphicon glyphicon-pencil"></i> Napomena</th>
-				<th><i class="glyphicon glyphicon-cog"></i></th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach ($reservations as $reservation)
-				<tr>
-					<td>{{ $reservation->user->first_name }}</td>
-					<td><strong>{{ Dish::getTitleByCode($reservation->dish) }}</strong></td>
-					<td>{{ $reservation->notes }}</td>
-					<td>
-						@if (Sentry::getUser()->id == $reservation->user->id)
-							<a href="#" class="btn btn-danger btn-mini"><i class="icon icon-remove"></i></a>
-						@endif
-					</td>
-				</tr>
-			@endforeach
-		</tbody>
-	</table> */ ?>
-
 	<blockquote>
-		<p>Ukupno: <em>{{ Reservation::getTotalPrice() }} kn</em></p>
+		<p>Ukupno: <em>{{ $totalPrice }} kn</em></p>
 	</blockquote>
 @else
 	<div class="alert">Nema rezervacija</div>

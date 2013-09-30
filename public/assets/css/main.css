@@ -2,11 +2,14 @@
 @import url(http://fonts.googleapis.com/css?family=Lobster+Two:400,700);
 
 /* Global */
-body { font-size: 14px; font-family: "Helvetica Neue", Helvetica, sans-serif; padding: 40px 0 60px 0; }
+body { font-size: 14px; font-family: "Helvetica Neue", Helvetica, sans-serif; padding: 35px 0 60px 0; }
 h2 { font-size: 20px; }
+h2.hd { border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; background: #f2f2f2; margin: 0 -18px; padding: 12px 18px; color: #666; font-family: Georgia, serif; font-style: italic; font-size: 20px; }
 .container { max-width: 800px; }
 .content { padding: 0 18px; }
+form label { font-size: 12px; color: #555; }
 @media only screen and (max-width : 800px) {
+	h2.hd { margin: 0 -18px; }
 	.content { padding: 0 18px; }
 }
 
@@ -46,13 +49,32 @@ table th.actions { text-align: center; }
 table td.actions { width: 1%; text-align: center; white-space: nowrap; }
 table td input { margin-right: 0; }
 
+/* My reservation */
+.my-reservation form { padding: 20px 0 40px 0; }
+
+/* Reservation complete overview */
+.complete-overview { margin: 0 0 30px 0;}
+.complete-overview ul { list-style-type: none; margin: 0; padding: 0; border-bottom: 2px solid #ddd; }
+.complete-overview li { border-top: 1px solid #eee; padding: 8px 0; font-family: Georgia, serif; font-size: 12px; }
+.complete-overview li strong { color: #91B609; margin-right: 7px; font-size: 17px; }
+.complete-overview li i.glyphicon { font-size: 70%; }
+.complete-overview .code { font-style: normal; color: #FF2D55; font-weight: bold; margin-left: 7px; font-size: 17px; }
+.complete-overview .dish { font-family: Georgia, serif; font-size: 16px; margin-left: 10px; }
+.complete-overview .price { float: right; text-align: right; color: #91B609; font-size: 16px; }
+.complete-overview blockquote { margin: 20px 0 10px 0; }
+.complete-overview blockquote em { font-weight: bold; font-family: Georgia, serif; }
+.complete-overview p.notes { font-size: 12px; color: #aaa; line-height: 160%; padding: 5px 0 0 36px; margin: 0; font-family: Helvetica, sans-serif; }
+.complete-overview p.notes i.glyphicon { color: #aaa; margin-right: 4px; }
+.complete-overview p.notes i.count { color: #5BC0DE; margin-right: 4px; font-style: normal; font-weight: bold; }
+.complete-overview p.notes i.text { margin-left: 2px; color: #666; font-style: normal; }
+
 /* Reservation list */
-.reservation-overview ul { list-style-type: none; margin: 0; padding: 0; border-bottom: 2px solid #ddd; }
-.reservation-overview li { border-top: 1px solid #ddd; padding: 6px 0; }
+.reservation-overview ul { list-style-type: none; margin: 0; padding: 0; border-bottom: 2px solid #eee; }
+.reservation-overview li { border-top: 1px solid #eee; padding: 6px 0; }
 .reservation-overview i  { font-size: 90%; margin-right: 6px; width: 14px; }
 .reservation-overview h3 { padding: 0; font-size: 16px; margin: 5px 0; line-height: 140%; }
 .reservation-overview h3 .code { font-style: normal; color: #FF2D55; }
-.reservation-overview h3 .price { color: #91B609; font-size: 80%; }
+.reservation-overview h3 .price { color: #91B609; font-size: 80%; font-family: Georgia, serif; font-weight: bold; }
 .reservation-overview h4 { margin: 5px 0; padding: 0; font-size: 15px; color: #269ABC; margin-right: 10px; line-height: 140%; float: left; width: 160px; }
 .reservation-overview p  { color: #aaa; font-style: italic; font-size: 12px; font-family: Georgia, serif; margin: 0; padding: 0; }
 .reservations blockquote { margin: 20px 0 10px 0; }

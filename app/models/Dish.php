@@ -33,7 +33,7 @@ class Dish extends \Eloquent {
 	 * @param  string $code
 	 * @return Dish
 	 */
-	public static function getTitleByCode($code)
+	public static function getTitleByCode($code, $tags = true)
 	{
 		$dish = self::getByCode($code);
 
@@ -43,7 +43,8 @@ class Dish extends \Eloquent {
 			$title .= "<strong class=\"title\">" . ($dish->title ? " " . strip_tags($dish->title) : ' ---') . "</strong>";
 			$title .= "<span class=\"price\">" . ($dish->price ? " / " . strip_tags($dish->price) . " <i>kn</i>" : null) . "</span>";
 
-			return $title;
+			if ($tags) return $title;
+			else       return strip_tags($title);
 		}
 
 		return $code;
