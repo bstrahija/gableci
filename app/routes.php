@@ -22,5 +22,6 @@ Route::group(array('before' => 'auth'), function()
 	Route::get('/', array('as' => 'reservations', 'uses' => 'App\Controllers\ReservationsController@getIndex'));
 	Route::post('/', array('as' => 'reservations.post', 'uses' => 'App\Controllers\ReservationsController@postIndex'));
 	Route::controller('reservations', 'App\Controllers\ReservationsController');
+	Route::controller('stats', 'App\Controllers\StatsController');
 	Route::resource('dishes', 'App\Controllers\DishesController');
 });

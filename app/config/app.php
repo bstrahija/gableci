@@ -193,6 +193,7 @@ return array(
 		'Profiler'     => 'Profiler\Facades\Profiler',
 		'Reservation'  => 'App\Models\Reservation',
 		'Sentry'       => 'Cartalyst\Sentry\Facades\Laravel\Sentry',
+		'Stats'        => 'App\Facades\StatsFacade',
 	),
 
 );

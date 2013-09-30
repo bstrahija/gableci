@@ -3,7 +3,7 @@
 @section('main')
 	<div class="row">
 		<div class="content">
-			<h2>Današnja jela</h2>
+			<h2 class="hd">Današnja jela</h2>
 
 			@if ($dishes)
 				<table class="table table-striped table-bordered">
