@@ -1,17 +1,22 @@
 $(function() {
 
+	// Detect iOS
+	var iOS = ( navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false );
+
 	// Detect fullscreen app
 	if (window.navigator.standalone) {
 		$("body").addClass("fullscreen");
 	}
 
-	// Fix some focus issues with fixed elements
-	$(document).on('focus', 'input, textarea', function() {
-		$("header, footer").fadeOut(10);
-	});
-	$(document).on('blur', 'input, textarea', function() {
-		$("header, footer").fadeIn(250);
-	});
+	// Fix some focus issues with fixed elements on iOS
+	if (iOS) {
+		$(document).on('focus', 'input, textarea, select', function() {
+			$("header, footer").hide();
+		});
+		$(document).on('blur', 'input, textarea, select', function() {
+			$("header, footer").fadeIn(250);
+		});
+	}
 
 	// Init lightbox images
 	$("a.lightbox").fancybox({
