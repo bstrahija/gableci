@@ -1,5 +1,9 @@
 $(function() {
 
+	if (window.navigator.standalone) {
+		$("body").addClass("fullscreen");
+	}
+
 	$("a.lightbox").fancybox({
 		padding: 0,
 		margin: 5,
