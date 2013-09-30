@@ -13,7 +13,7 @@
 
 // ! Auth routes
 Route::get('logout',  array('as' => 'logout',      'uses' => 'App\Controllers\AuthController@getLogout'));
-Route::get('login',   array('as' => 'login',       'uses' => 'App\Controllers\AuthController@getLogin'));
+Route::get('login',   array('as' => 'login',       'uses' => 'App\Controllers\AuthController@getLogin', 'before' => 'guest'));
 Route::post('login',  array('as' => 'login.post',  'uses' => 'App\Controllers\AuthController@postLogin'));
 
 // ! App routes

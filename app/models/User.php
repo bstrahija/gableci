@@ -20,6 +20,16 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	protected $hidden = array('password');
 
 	/**
+	 * Return users full name
+	 * @param  string $value
+	 * @return string
+	 */
+	public function getFullNameAttribute($value)
+	{
+		return $this->first_name . ' ' . $this->last_name;
+	}
+
+	/**
 	 * Get the unique identifier for the user.
 	 *
 	 * @return mixed

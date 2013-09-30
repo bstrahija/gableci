@@ -10,7 +10,7 @@ class AuthController extends BaseController {
 	 */
 	public function getLogin()
 	{
-		return View::make('auth.login');
+		return View::make('auth.login', array('login' => true));
 	}
 
 	/**

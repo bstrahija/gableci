@@ -39,11 +39,11 @@ class Dish extends \Eloquent {
 
 		if ($dish)
 		{
-			$title  = "[{$dish->code}]";
-			$title .= $dish->title ? " {$dish->title} " : ' ---';
-			$title .= $dish->price ? " / {$dish->price} kn" : null;
+			$title  = "<em class=\"code\">[{$dish->code}]</em>";
+			$title .= "<strong class=\"title\">" . ($dish->title ? " " . strip_tags($dish->title) : ' ---') . "</strong>";
+			$title .= "<span class=\"price\">" . ($dish->price ? " / " . strip_tags($dish->price) . " <i>kn</i>" : null) . "</span>";
 
-			return strip_tags($title);
+			return $title;
 		}
 
 		return $code;

@@ -3,19 +3,19 @@
 @section('main')
 
 	<div class="row">
-		<div class="flyer span3">
+		<?php /*<div class="flyer col-md-3">
 			@if ($flyer)
 				<h2>Danas</h2>
 				<a href="{{ $flyer['href'] }}" class="lightbox"><img src="{{ $flyer['src'] }}" alt=""></a>
 			@endif
-		</div>
+		</div>*/ ?>
 
-		<div class="content span9">
+		<div class="content">
 			<div class="my-reservation">
 				<h2>Moja rezervacija za danas</h2>
 
-				{{ Form::model($myReservation, array('class' => 'form-horizontal', 'route' => 'reservations.post')) }}
-					<div class="control-group">
+				{{ Form::model($myReservation, array('route' => 'reservations.post')) }}
+					<div class="form-group">
 						<label for="dish" class="control-label">Jelo</label>
 						<div class="controls">
 							{{ Form::select('dish', array(
@@ -27,15 +27,15 @@
 								5 => Dish::getTitleByCode(5),
 								6 => Dish::getTitleByCode(6),
 								7 => Dish::getTitleByCode(7),
-							)) }}
+							), null, array('class' => 'form-control')) }}
 						</div>
 					</div>
-					<div class="control-group">
+					<div class="form-group">
 						<label for="notes" class="control-label">Napomena</label>
-						<div class="controls">{{ Form::textarea('notes', null, array('rows' => 2)) }}</div>
+						<div class="controls">{{ Form::textarea('notes', null, array('rows' => 2, 'class' => 'form-control')) }}</div>
 					</div>
 					<div class="form-actions">
-						<button type="submit" class="btn btn-primary">Spremi</button>
+						<button type="submit" class="btn btn-info">Spremi</button>
 					</div>
 				{{ Form::close() }}
 			</div>
@@ -43,7 +43,7 @@
 			<hr>
 
 			<div class="reservations">
-				<h2>Ostale rezervacije</h2>
+				<h2>Sve rezervacije</h2>
 
 				<div id="reservation-reload">
 					@include('reservations.overview')

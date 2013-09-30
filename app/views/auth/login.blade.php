@@ -6,26 +6,28 @@
 
 	<div id="login" class="login">
 
+		<h1>Gableci</h1>
+
 		@if ($errors->has('login'))
 			<div class="alert alert-error">{{ $errors->first('login', ':message') }}</div>
 		@endif
 
-		<div class="control-group">
+		<div class="form-group">
 			{{ Form::label('email', 'Email') }}
 			<div class="controls">
-				{{ Form::text('email') }}
+				{{ Form::text('email', null, array('class' => 'form-control')) }}
 			</div>
 		</div>
 
-		<div class="control-group">
+		<div class="form-group">
 			{{ Form::label('password', 'Password') }}
 			<div class="controls">
-				{{ Form::password('password') }}
+				{{ Form::password('password', array('class' => 'form-control')) }}
 			</div>
 		</div>
 
 		<div class="form-actions">
-			{{ Form::submit('Login', array('class' => 'btn btn-inverse btn-login')) }}
+			{{ Form::submit('Login', array('class' => 'btn btn-primary btn-login')) }}
 		</div>
 
 	</div>
