@@ -13,18 +13,24 @@ $(function() {
 		closeSpeed: 100
 	});
 
-
-	var reservationRefreshInterval = setInterval(function() {
-		$.ajax({
-			url: APP_URL,
-			success: function(data) {
-				$("#reservation-reload").html(data);
-				//console.log("Reservations reloaded...");
-			},
-			error: function(e) {
-				//console.error(e);
-			}
-		});
-	}, 20000);
+	if (APP_ROUTE == 'reservations') {
+		var reservationRefreshInterval = setInterval(function() {
+			$.ajax({
+				url: APP_URL,
+				success: function(data) {
+					$("#reservation-reload").html(data);
+					//console.log("Reservations reloaded...");
+				},
+				error: function(e) {
+					if (e.status == 401) {
+						alert("You are not logged in!");
+						document.location = APP_URL + "login";
+					} else {
+						console.error("Error when refreshing reservations!");
+					}
+				}
+			});
+		}, 20000);
+	}
 
 });

@@ -1,5 +1,6 @@
 <script>
 var APP_URL = '<?php echo url(); ?>/';
+var APP_ROUTE = '<?php echo Route::currentRouteName(); ?>';
 </script>
 
 <link href="{{ URL::asset('assets/css/bootstrap.min.css?c=' . date('ymdHis')) }}" rel="stylesheet">

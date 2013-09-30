@@ -37,7 +37,8 @@ Route::filter('auth', function()
 {
 	if ( ! Sentry::check())
 	{
-		return Redirect::route('login');
+		if ( ! Request::ajax()) return Redirect::route('login');
+		else                    return Response::json(array('error' => 'forbidden'), 401);
 	}
 });
 
