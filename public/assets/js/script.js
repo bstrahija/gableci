@@ -2,8 +2,11 @@ $(function() {
 
 	$("a.lightbox").fancybox({
 		padding: 0,
-		margin: 0,
-		closeClick: true
+		margin: 5,
+		closeClick: true,
+		closeBtn: false,
+		openSpeed: 200,
+		closeSpeed: 100
 	});
 
 
