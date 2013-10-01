@@ -76,7 +76,7 @@ class Reservation extends \Eloquent {
 						{
 							foreach ($overview[$reservation->dish]['notes'] as &$note)
 							{
-								if (isset($note['text']) and $note['text'] == $reservation->notes)
+								if (isset($note['text']) and strtolower($note['text']) == strtolower($reservation->notes))
 								{
 									$note['count']++;
 									$note['names'][] = $reservation->user->full_name;
