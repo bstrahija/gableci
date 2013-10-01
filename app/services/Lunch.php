@@ -61,6 +61,15 @@ class Lunch {
 	}
 
 	/**
+	 * Return all flyers
+	 * @return array
+	 */
+	public function flyers()
+	{
+		return $this->flyers;
+	}
+
+	/**
 	 * Get flyer href
 	 * @param  string $date
 	 * @return string

@@ -20,6 +20,7 @@ class Reservation extends \Eloquent {
 		$myReservation = Reservation::where('created_at', '>=', date('Y-m-d') . ' 00:00:00')
 		                            ->where('created_at', '<=', date('Y-m-d') . ' 23:59:59')
 		                            ->where('user_id', \Sentry::getUser()->id)
+		                            ->with('user')
 		                            ->first();
 
 		return $myReservation;
@@ -34,6 +35,7 @@ class Reservation extends \Eloquent {
 		$reservations = Reservation::where('created_at', '>=', date('Y-m-d') . ' 00:00:00')
 		                           ->where('created_at', '<=', date('Y-m-d') . ' 23:59:59')
 		                           ->orderBy('dish')
+		                           ->with('user')
 		                           ->get();
 
 		return $reservations;
