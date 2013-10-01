@@ -32,7 +32,7 @@ class Stats {
 		{
 			$spent = DB::table('reservations')
 			           ->join('dishes', 'dishes.id', '=', 'reservations.dish')
-			           ->select('reservations.user_id', DB::raw('SUM(dishes.price) AS total'))
+			           ->select('reservations.user_id', DB::raw('SUM(dishes.price) AS total'), DB::raw('(SUM(dishes.price) / COUNT(reservations.id)) AS average'))
 			           ->where('reservations.user_id', $user->id);
 
 			// Date range
@@ -47,13 +47,14 @@ class Stats {
 
 			// Fill it
 			$stats[] = (object) array(
-				'spent' => $spent->total,
-				'user'  => $user,
+				'spent'   => $spent->total,
+				'average' => round($spent->average, 2),
+				'user'    => $user,
 			);
 		}
 
 		// Order it
-		usort($stats, function($a, $b) { return $a->spent < $b->spent; });
+		usort($stats, function($a, $b) { return $a->average < $b->average; });
 
 		return $stats;
 	}

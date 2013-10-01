@@ -6,34 +6,47 @@ use Input, Lunch, Redirect, Request, Sentry, View;
 class ReservationsController extends BaseController {
 
 	/**
+	 * Container for view data
+	 * @var array
+	 */
+	protected $data = array();
+
+	/**
+	 * Initialize view data
+	 */
+	public function __construct()
+	{
+		$this->data = array(
+			'flyer'         => Lunch::flyer(),
+			'myReservation' => Reservation::getMine(),
+			'reservations'  => Reservation::getForToday(),
+			'overview'      => Reservation::getOverviewForToday(),
+			'totalPrice'    => Reservation::getTotalPrice(),
+		);
+	}
+
+	/**
 	 * Index page for lunch reservation
 	 * @return View
 	 */
 	public function getIndex()
 	{
-		// Get the flyer
-		$flyer = Lunch::flyer();
-
-		// Get my reservation for today
-		$myReservation = Reservation::getMine();
-
-		// Get today's reservations for everybody
-		$reservations = Reservation::getForToday();
-
-		// Get today's reservation overview
-		$overview = Reservation::getOverviewForToday();
-
-		// Get total price
-		$totalPrice = Reservation::getTotalPrice();
-
-		// Check for ajax request
-		if (Request::ajax()) $view = 'reservations.overview';
-		else                 $view = 'reservations.index';
-
-		// Render view with data
-		return View::make($view)->with(compact('flyer', 'myReservation', 'reservations', 'overview', 'totalPrice'));
+		return View::make('reservations.index', $this->data);
 	}
 
+	/**
+	 * Only render the overview partial
+	 * @return View
+	 */
+	public function getOverview()
+	{
+		return View::make('reservations.overview', $this->data);
+	}
+
+	/**
+	 * Create a reservation
+	 * @return Redirect
+	 */
 	public function postIndex()
 	{
 		$myReservation = Reservation::getMine();

@@ -15,8 +15,8 @@
 					<ol>
 						@foreach ($spent as $entry)
 							<li>
-								{{ $entry->user->full_name }}
-								<em class="money">{{ (float) $entry->spent }} kn</em>
+								{{ $entry->user->first_name }}
+								<em class="money">{{ (float) $entry->average }} kn / {{ (float) $entry->spent }} kn</em>
 							</li>
 						@endforeach
 					</ol>

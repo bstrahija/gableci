@@ -32,7 +32,7 @@ $(function() {
 	if (APP_ROUTE == 'reservations') {
 		var reservationRefreshInterval = setInterval(function() {
 			$.ajax({
-				url: APP_URL,
+				url: APP_URL + 'reservations/overview',
 				success: function(data) {
 					$("#reservation-reload").html(data);
 					//console.log("Reservations reloaded...");
