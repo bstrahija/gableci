@@ -16,7 +16,7 @@
 						@foreach ($spent as $entry)
 							<li>
 								{{ $entry->user->full_name }}
-								<em class="money">{{ $entry->spent }} kn</em>
+								<em class="money">{{ (float) $entry->spent }} kn</em>
 							</li>
 						@endforeach
 					</ol>
