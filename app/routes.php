@@ -22,10 +22,12 @@ Route::get('/', function() { return View::make('application'); });
 // ! API routes
 Route::group(array('prefix' => 'api'), function()
 {
+	Route::get('reservations/home',     'App\Controllers\Api\ReservationsController@home');
 	Route::get('reservations/mine',     'App\Controllers\Api\ReservationsController@mine');
 	Route::get('reservations/overview', 'App\Controllers\Api\ReservationsController@overview');
 	Route::get('reservations/flyer',    'App\Controllers\Api\ReservationsController@flyer');
 	Route::get('reservations/flyers',   'App\Controllers\Api\ReservationsController@flyers');
+	Route::get('reservations/total',    'App\Controllers\Api\ReservationsController@totalPrice');
 	Route::resource('reservations',     'App\Controllers\Api\ReservationsController');
 
 	/*Route::get('/', array('as' => 'reservations', 'uses' => 'App\Controllers\ReservationsController@getIndex'));

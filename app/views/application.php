@@ -7,20 +7,24 @@
 </head>
 <body>
 
-<?php partial('_partial.header'); ?>
-
 <script type="text/x-handlebars">
-  <h2>Welcome to Ember.js</h2>
+	<?php hbs_template('_partial.header'); ?>
 
-  {{outlet}}
+	<div class="container">
+		{{outlet}}
+	</div>
 </script>
 
 <script type="text/x-handlebars" data-template-name="index">
-  <ul>
-  {{#each item in model}}
-    <li>{{item}}</li>
-  {{/each}}
-  </ul>
+	<?php hbs_template('reservations'); ?>
+</script>
+
+<script type="text/x-handlebars" data-template-name="reservations">
+	<?php hbs_template('reservations'); ?>
+</script>
+
+<script type="text/x-handlebars" data-template-name="dishes">
+	<?php hbs_template('dishes'); ?>
 </script>
 
 <?php partial('_partial.footer'); ?>

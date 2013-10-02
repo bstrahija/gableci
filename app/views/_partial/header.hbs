@@ -1,0 +1,22 @@
+	<header>
+		<div class="wrap">
+			{{#if flyer}}
+				<a href="{{flyer.href}}" class="lightbox dish-menu"><i class="glyphicon glyphicon-picture"></i> Meni</a>
+			{{else}}
+				<a href="#" class="dish-menu dish-menu-missing" title="Greška!"><i class="glyphicon glyphicon-ban-circle"></i> Meni</a>
+			{{/if}}
+
+			<h1>{{#link-to 'dishes'}}Gableci{{/link-to}}</h1>
+
+			<a href="#" onclick="window.location.reload(true); return false;" class="refresh"><i class="glyphicon glyphicon-refresh"></i></a>
+		</div>
+	</header>
+
+	<footer>
+		<nav>
+			<ul class="clearfix">
+				<li class="reservations">{{#link-to 'index'}}<i class="glyphicon glyphicon-ok"></i> Rezervacije{{/link-to}}</li>
+				<li class="dishes">{{#link-to 'dishes'}}<i class="glyphicon glyphicon-cutlery"></i> Jela{{/link-to}}</li>
+			</ul>
+		</nav>
+	</footer>

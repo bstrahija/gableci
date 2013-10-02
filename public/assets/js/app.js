@@ -1,11 +1,14 @@
 App = Ember.Application.create();
 
+// Define all my routes
 App.Router.map(function() {
-	// put your routes here
+	this.route("reservations", { path: "/reservations" });
+	this.route("dishes",       { path: "/dishes" });
 });
 
+// Bind model to reservation route
 App.IndexRoute = Ember.Route.extend({
 	model: function() {
-		return ['red', 'yellow', 'blue'];
+		return Ember.$.getJSON('http://gableci.dev/api/reservations/home');
 	}
 });

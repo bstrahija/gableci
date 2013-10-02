@@ -1,7 +1,7 @@
 <?php namespace App\Controllers\Api;
 
 use App\Models\Reservation;
-use Input, Lunch, Redirect, Request, Sentry, View;
+use Input, Lunch, Redirect, Request, Response, Sentry, View;
 
 class ReservationsController extends BaseController {
 
@@ -12,6 +12,21 @@ class ReservationsController extends BaseController {
 	public function index()
 	{
 		return Reservation::getForToday();
+	}
+
+	/**
+	 * Returns various data for home screen to reduce requests
+	 * @return Response
+	 */
+	public function home()
+	{
+		return Response::json(array(
+			'flyer'          => Lunch::flyer(),
+			// 'my_reservation' => Reservation::getMine(),
+			'overview'       => (array) Reservation::getOverviewForToday(),
+			'reservations'   => Reservation::getForToday()->toArray(),
+			'total_price'    => Reservation::getTotalPrice(),
+		));
 	}
 
 	/**
@@ -58,6 +73,44 @@ class ReservationsController extends BaseController {
 	public function overview()
 	{
 		return Reservation::getOverviewForToday();
+	}
+
+	/**
+	 * Return total price for todays reservations
+	 * @return Response
+	 */
+	public function totalPrice()
+	{
+		return Response::json(array('price' => Reservation::getTotalPrice()));
+	}
+
+	/**
+	 * Create new reservation
+	 * @return Response
+	 */
+	public function create()
+	{
+
+	}
+
+	/**
+	 * Update existing reservation
+	 * @param  integer $id
+	 * @return Response
+	 */
+	public function update($id)
+	{
+
+	}
+
+	/**
+	 * Delete existing reservation
+	 * @param  integer $id
+	 * @return Response
+	 */
+	public function delete($id)
+	{
+
 	}
 
 }
