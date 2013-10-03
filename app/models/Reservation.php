@@ -66,58 +66,62 @@ class Reservation extends \Eloquent {
 		{
 			foreach ($reservations as $reservation)
 			{
-				// Get reservation dish
-				$dish = Dish::getByCode($reservation->dish);
-
-				// Check if dish is in list
-				$existing = array_has($overview, 'dish', $reservation->dish);
-
-				// Take action
-				if ($existing !== false and isset($overview[$existing]))
+				if ($reservation->dish)
 				{
-					$overview[$existing]['count']++;
-					$overview[$existing]['price']      += $dish->price;
-					$overview[$existing]['usernames'][] = $reservation->user->full_name;
-					$overview[$existing]['users'][]     = $reservation->user->toArray();
+					// Get reservation dish
+					$dish = Dish::getByCode($reservation->dish);
 
-					// Trim it
-					$reservation->notes = strip_tags(trim($reservation->notes));
+					// Check if dish is in list
+					$existing = array_has($overview, 'dish', $reservation->dish);
 
-					// Count the notes (dont't duplicate)
-					if ($reservation->notes)
+					// Take action
+					if ($existing !== false and isset($overview[$existing]))
 					{
-						if ($overview[$existing]['notes'])
+						$existing = (int) $existing;
+						$overview[$existing]['count']++;
+						$overview[$existing]['price']      += $dish->price;
+						$overview[$existing]['usernames'][] = $reservation->user->full_name;
+						$overview[$existing]['users'][]     = $reservation->user->toArray();
+
+						// Trim it
+						$reservation->notes = strip_tags(trim($reservation->notes));
+
+						// Count the notes (dont't duplicate)
+						if ($reservation->notes)
 						{
-							foreach ($overview[$existing]['notes'] as &$note)
+							if ($overview[$existing]['notes'])
 							{
-								if (isset($note['text']) and strtolower($note['text']) == strtolower($reservation->notes))
+								foreach ($overview[$existing]['notes'] as &$note)
 								{
-									$note['count']++;
-									$note['names'][] = $reservation->user->full_name;
-								}
-								else
-								{
-									$overview[$existing]['notes'][] = array('text' => $reservation->notes, 'count' => 1, 'names' => array($reservation->user->full_name));
+									if (isset($note['text']) and strtolower($note['text']) == strtolower($reservation->notes))
+									{
+										$note['count']++;
+										$note['names'][] = $reservation->user->full_name;
+									}
+									else
+									{
+										$overview[$existing]['notes'][] = array('text' => $reservation->notes, 'count' => 1, 'names' => array($reservation->user->full_name));
+									}
 								}
 							}
-						}
-						else
-						{
-							$overview[$existing]['notes'] = array(array('text' => $reservation->notes, 'count' => 1, 'names' => array($reservation->user->full_name)));
+							else
+							{
+								$overview[$existing]['notes'] = array(array('text' => $reservation->notes, 'count' => 1, 'names' => array($reservation->user->full_name)));
+							}
 						}
 					}
-				}
-				else
-				{
-					$overview[] = array(
-						'dish'      => $reservation->dish,
-						'title'     => $dish->title,
-						'count'     => 1,
-						'price'     => $dish->price,
-						'usernames' => array($reservation->user->full_name),
-						'notes'     => $reservation->notes ? array(array('text' => $reservation->notes, 'count' => 1, 'names' => array($reservation->user->full_name))) : array(),
-						'users'     => array($reservation->user->toArray()),
-					);
+					else
+					{
+						$overview[] = array(
+							'dish'      => $reservation->dish,
+							'title'     => $dish->title,
+							'count'     => 1,
+							'price'     => $dish->price,
+							'usernames' => array($reservation->user->full_name),
+							'notes'     => $reservation->notes ? array(array('text' => $reservation->notes, 'count' => 1, 'names' => array($reservation->user->full_name))) : array(),
+							'users'     => array($reservation->user->toArray()),
+						);
+					}
 				}
 			}
 		}

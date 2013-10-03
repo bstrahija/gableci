@@ -35,14 +35,17 @@
 								<em class="dish">{{title}}</em>
 								<span class="price">{{price}} kn</span>
 
-								<p class="notes">
-
-										<i class="glyphicon glyphicon-bookmark"></i>
-										<i class="count">Note count</i>
-										x
-										<i class="text">Note text</i>
-										<br>
-								</p>
+								{{#if notes}}
+									<p class="notes">
+										{{#each note in notes}}
+											<i class="glyphicon glyphicon-bookmark"></i>
+											<i class="count">{{note.count}}</i>
+											x
+											<i class="text">{{note.text}}</i>
+											<br>
+										{{/each}}
+									</p>
+								{{/if}}
 							</li>
 						{{/each}}
 					</ul>
