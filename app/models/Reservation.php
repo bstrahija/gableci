@@ -107,9 +107,9 @@ class Reservation extends \Eloquent {
 					{
 						$overview[] = array(
 							'dish'      => $reservation->dish,
-							'title'     => $dish->title,
+							'title'     => ($dish) ? $dish->title : null,
 							'count'     => 1,
-							'price'     => $dish->price,
+							'price'     => ($dish) ? $dish->price : null,
 							'usernames' => array($reservation->user->full_name),
 							'notes'     => $reservation->notes ? array(array('text' => $reservation->notes, 'count' => 1, 'names' => array($reservation->user->full_name))) : array(),
 							'users'     => array($reservation->user->toArray()),
