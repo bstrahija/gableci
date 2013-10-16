@@ -44,7 +44,11 @@
 
 					<h3>
 						<i class="glyphicon glyphicon-cutlery"></i>
-						{{ Dish::getTitleByCode($reservation->dish) }}
+						@if ($reservation->dish)
+							{{ Dish::getTitleByCode($reservation->dish) }}
+						@else
+							---
+						@endif
 					</h3>
 
 					@if ($reservation->notes)

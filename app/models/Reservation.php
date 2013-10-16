@@ -55,18 +55,21 @@ class Reservation extends \Eloquent {
 		{
 			foreach ($reservations as $reservation)
 			{
-				// Get reservation dish
-				$dish = Dish::getByCode($reservation->dish);
-
-				if ($dish)
+				if ($reservation->dish)
 				{
-					// Check if already exists
-					if (isset($overview[$reservation->dish]))
+					// Get reservation dish
+					$dish = Dish::getByCode($reservation->dish);
+
+					// Check if dish is in list
+					$existing = array_has($overview, 'dish', $reservation->dish);
+
+					if ($existing !== false and isset($overview[$existing]))
 					{
-						$overview[$reservation->dish]['count']++;
-						$overview[$reservation->dish]['price']      += $dish->price;
-						$overview[$reservation->dish]['usernames'][] = $reservation->user->full_name;
-						$overview[$reservation->dish]['users'][]     = $reservation->user->toArray();
+						$existing = (int) $existing;
+						$overview[$existing]['count']++;
+						$overview[$existing]['price']      += $dish->price;
+						$overview[$existing]['usernames'][] = $reservation->user->full_name;
+						$overview[$existing]['users'][]     = $reservation->user->toArray();
 
 						// Trim it
 						$reservation->notes = strip_tags(trim($reservation->notes));
@@ -74,30 +77,35 @@ class Reservation extends \Eloquent {
 						// Count the notes (dont't duplicate)
 						if ($reservation->notes)
 						{
-							if ($overview[$reservation->dish]['notes'])
+							if ($overview[$existing]['notes'])
 							{
-								foreach ($overview[$reservation->dish]['notes'] as &$note)
+								$existingNote = false;
+
+								foreach ($overview[$existing]['notes'] as &$note)
 								{
 									if (isset($note['text']) and strtolower($note['text']) == strtolower($reservation->notes))
 									{
 										$note['count']++;
 										$note['names'][] = $reservation->user->full_name;
+										$existingNote = true;
 									}
-									else
-									{
-										$overview[$reservation->dish]['notes'][] = array('text' => $reservation->notes, 'count' => 1, 'names' => array($reservation->user->full_name));
-									}
+								}
+
+								// Add new one if not existing
+								if ( ! $existingNote)
+								{
+									$overview[$existing]['notes'][] = array('text' => $reservation->notes, 'count' => 1, 'names' => array($reservation->user->full_name));
 								}
 							}
 							else
 							{
-								$overview[$reservation->dish]['notes'] = array(array('text' => $reservation->notes, 'count' => 1, 'names' => array($reservation->user->full_name)));
+								$overview[$existing]['notes'] = array(array('text' => $reservation->notes, 'count' => 1, 'names' => array($reservation->user->full_name)));
 							}
 						}
 					}
 					else
 					{
-						$overview[$reservation->dish] = array(
+						$overview[] = array(
 							'dish'      => $reservation->dish,
 							'title'     => $dish->title,
 							'count'     => 1,
@@ -115,7 +123,7 @@ class Reservation extends \Eloquent {
 	}
 
 	/**
-	 * Calculate total prce of reservations
+	 * Calculate total price of reservations
 	 * @return float
 	 */
 	public static function getTotalPrice()

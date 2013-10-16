@@ -10,7 +10,7 @@
 
 	<link rel="apple-touch-icon" href="{{ asset('assets/img/iTunesArtwork.png') }}">
 
-	@include('_partials.assets')
+	@include('_partials.assets_head')
 </head>
 <body class="{{ isset($login) ? 'login-screen' : '' }}">
 @include('_partials.header')

@@ -1,3 +1,5 @@
+<div class="hook" id="hook"></div>
+
 @if (Sentry::check())
 	<header>
 		<div class="wrap">

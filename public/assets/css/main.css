@@ -2,6 +2,7 @@
 @import url(http://fonts.googleapis.com/css?family=Lobster+Two:400,700);
 
 /* Global */
+
 body { font-size: 14px; font-family: "Helvetica Neue", Helvetica, sans-serif; padding: 38px 0 60px 0; }
 body.fullscreen { padding-top: 58px; }
 h2 { font-size: 20px; }
@@ -27,7 +28,8 @@ header a.refresh { color: #fff; position: absolute; bottom: 8px; right: 18px; }
 header a.dish-menu { color: #fff; position: absolute; bottom: 8px; left: 18px; }
 header i.glyphicon { position: relative; top: -1px; }
 header a.dish-menu-missing { color: #b00; }
-header a:hover { text-decoration: none; }
+header a:hover { text-decoration: none; color: #1D62d6; }
+header a:active, header h1 a:active { color: #1D62d6; -webkit-tap-highlight-color: rgba(0,0,0,0); }
 
 /* Footer */
 footer { position: fixed; bottom: 0; left: 0; width: 100%; border-top: 1px solid #ccc; z-index: 100; background: rgba(245,245,245,0.98); }

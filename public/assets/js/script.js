@@ -1,5 +1,4 @@
 $(function() {
-
 	// Detect iOS
 	var iOS = ( navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false );
 
@@ -7,6 +6,12 @@ $(function() {
 	if (window.navigator.standalone) {
 		$("body").addClass("fullscreen");
 	}
+
+	// Add touchstart event for faster touch response
+	document.addEventListener("touchstart", function(){}, true);
+
+	// Remove delay on touch
+	FastClick.attach(document.body);
 
 	// Fix some focus issues with fixed elements on iOS
 	if (iOS) {
@@ -56,5 +61,10 @@ $(function() {
 		if (range) document.location = APP_URL + 'stats?range=' + range;
 		else       document.location = APP_URL + 'stats';
 	});
+
+	// Pull to refresh
+	if (iOS) {
+		$('#hook').hook();
+	}
 
 });
