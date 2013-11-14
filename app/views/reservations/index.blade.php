@@ -20,19 +20,22 @@
 						<div class="controls">
 							{{ Form::select('dish', array(
 								'' => 'Biraj...',
-								1 => Dish::getTitleByCode(1, false),
-								2 => Dish::getTitleByCode(2, false),
-								3 => Dish::getTitleByCode(3, false),
-								4 => Dish::getTitleByCode(4, false),
-								5 => Dish::getTitleByCode(5, false),
-								6 => Dish::getTitleByCode(6, false),
-								7 => Dish::getTitleByCode(7, false),
+								1  => Dish::getTitleByCode(1,  false),
+								2  => Dish::getTitleByCode(2,  false),
+								3  => Dish::getTitleByCode(3,  false),
+								4  => Dish::getTitleByCode(4,  false),
+								5  => Dish::getTitleByCode(5,  false),
+								6  => Dish::getTitleByCode(6,  false),
+								7  => Dish::getTitleByCode(7,  false),
+								8  => Dish::getTitleByCode(8,  false),
+								9  => Dish::getTitleByCode(9,  false),
+								10 => Dish::getTitleByCode(10, false),
 							), null, array('class' => 'form-control')) }}
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="notes" class="control-label">Napomena</label>
-						<div class="controls">{{ Form::textarea('notes', null, array('rows' => 2, 'class' => 'form-control')) }}</div>
+						<div class="controls">{{ Form::text('notes', null, array('class' => 'form-control')) }}</div>
 					</div>
 					<div class="form-actions">
 						<button type="submit" class="btn btn-info">Spremi</button>

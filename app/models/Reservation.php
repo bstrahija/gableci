@@ -67,7 +67,7 @@ class Reservation extends \Eloquent {
 					{
 						$existing = (int) $existing;
 						$overview[$existing]['count']++;
-						$overview[$existing]['price']      += $dish->price;
+						$overview[$existing]['price']      += ($dish) ? $dish->price : 0;
 						$overview[$existing]['usernames'][] = $reservation->user->full_name;
 						$overview[$existing]['users'][]     = $reservation->user->toArray();
 
