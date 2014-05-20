@@ -1,6 +1,6 @@
 <?php namespace App\Services;
 
-use Cache, Goutte\Client, Log;
+use Cache, Carbon\Carbon, Goutte\Client, Log;
 
 class Lunch {
 
@@ -116,15 +116,30 @@ class Lunch {
 					$dateStartPos = strrpos($href, 'DNEVNI%20MENU%20') + strlen('DNEVNI%20MENU%20');
 					$date         = substr($href, $dateStartPos, 6);
 
+					if ( ! (int) $date)
+					{
+						$dateStartPos = strrpos($href, 'GARESTIN%20') + strlen('GARESTIN%20');
+						$date         = substr($href, $dateStartPos, 6);
+					}
+
 					// Add to list
 					$this->flyers[$date] = array('href' => $href);
 				}
+
+				echo '<pre>'; print_r("==================================================="); echo '</pre>';
+				echo '<pre>'; print_r("==================================================="); echo '</pre>';
 
 				foreach ($imgs as $img)
 				{
 					$src          = $img->getAttribute('src');
 					$dateStartPos = strrpos($src, 'DNEVNI%20MENU%20') + strlen('DNEVNI%20MENU%20');
 					$date         = substr($src, $dateStartPos, 6);
+
+					if ( ! (int) $date)
+					{
+						$dateStartPos = strrpos($src, 'GARESTIN%20') + strlen('GARESTIN%20');
+						$date         = substr($src, $dateStartPos, 6);
+					}
 
 					// Add to list
 					$this->flyers[$date]['src'] = $src;

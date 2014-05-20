@@ -13,8 +13,6 @@
 
 $app = new Illuminate\Foundation\Application;
 
-$app->redirectIfTrailingSlash();
-
 /*
 |--------------------------------------------------------------------------
 | Detect The Application Environment
@@ -26,12 +24,11 @@ $app->redirectIfTrailingSlash();
 |
 */
 
-$env = $app->detectEnvironment(array(
+$env = $app->detectEnvironment(function() {
 
-	'local'      => array('localhost', 'gableci.dev'),
-	'production' => array('gableci.krustr.net'),
+	return getenv('APP_ENV') ?: 'development';
 
-));
+});
 
 /*
 |--------------------------------------------------------------------------

@@ -1,4 +1,5 @@
 /app/database/seeds/SentrySeederReal.php
+/app/database/local.sqlite
 /app/config/production
 /app/storage/*
 /bootstrap/compiled.php

@@ -3,12 +3,13 @@
 	"description": "The Laravel Framework.",
 	"keywords": ["framework", "laravel"],
 	"require": {
-		"laravel/framework": "4.0.*",
-		"cartalyst/sentry": "2.0.*",
-		"imagine/Imagine": "v0.4.1",
+		"laravel/framework"         : "4.1.*",
+		"cartalyst/sentry"          : "2.1.*",
+		"imagine/Imagine"           : "0.5.*",
 		"edvinaskrucas/notification": "1.*",
-		"fabpot/goutte": "1.0.*",
-		"itsgoingd/clockwork": "dev-master"
+		"fabpot/goutte"             : "2.0.*",
+		"itsgoingd/clockwork"       : "1.*",
+		"vlucas/phpdotenv"          : "1.*"
 	},
 	"autoload": {
 		"classmap": [
