@@ -95,16 +95,16 @@ class Lunch {
 	{
 		if ( ! Cache::has('flyers'))
 		{
-			// Fetch page content
-			$this->client  = new Client();
-			$this->crawler = $this->client->request('GET', $this->url);
-			$container     = $this->crawler->filter(".tekst");
-			$html          = $container->html();
-			$dom           = new \DomDocument();
-			Log::debug("Fetching from url: " . $this->url, array('LUNCH SERVICE'));
-
 			try
 			{
+				// Fetch page content
+				$this->client  = new Client();
+				$this->crawler = $this->client->request('GET', $this->url);
+				$container     = $this->crawler->filter(".tekst");
+				$html          = $container->html();
+				$dom           = new \DomDocument();
+				Log::debug("Fetching from url: " . $this->url, array('LUNCH SERVICE'));
+
 				$dom->loadHTML($html);
 				$urls = $dom->getElementsByTagName('a');
 				$imgs = $dom->getElementsByTagName('img');
