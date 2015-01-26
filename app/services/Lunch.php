@@ -101,7 +101,6 @@ class Lunch {
 	 */
 	public function scrape()
 	{
-		Cache::forget('flyers');
 		if ( ! Cache::has('flyers'))
 		{
 			try
