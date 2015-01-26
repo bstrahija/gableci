@@ -57,7 +57,7 @@ class ReservationsController extends BaseController {
 		// Save data
 		$myReservation->dish    = Input::get('dish');
 		$myReservation->notes   = strip_tags(Input::get('notes'));
-		$myReservation->user_id = Sentry::getUser()->id;
+		$myReservation->user_id = Auth::user()->id;
 		$myReservation->save();
 
 		return Redirect::route('reservations');

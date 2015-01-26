@@ -109,7 +109,7 @@ return array(
 
 		// ! Required services
 		// 'Profiler\ProfilerServiceProvider',
-		'Cartalyst\Sentry\SentryServiceProvider',
+		// 'Cartalyst\Sentry\SentryServiceProvider',
 		'Krucas\Notification\NotificationServiceProvider',
 		'Clockwork\Support\Laravel\ClockworkServiceProvider',
 
@@ -186,7 +186,7 @@ return array(
 		'Notification' => 'Krucas\Notification\Facades\Notification',
 		'Profiler'     => 'Profiler\Facades\Profiler',
 		'Reservation'  => 'App\Models\Reservation',
-		'Sentry'       => 'Cartalyst\Sentry\Facades\Laravel\Sentry',
+		// 'Sentry'       => 'Cartalyst\Sentry\Facades\Laravel\Sentry',
 		'Stats'        => 'App\Facades\StatsFacade',
 	),
 

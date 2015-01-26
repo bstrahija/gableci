@@ -1,6 +1,6 @@
 <?php namespace App\Controllers;
 
-use Input, Redirect, Sentry, View;
+use Auth, Input, Redirect, View;
 
 class AuthController extends BaseController {
 
@@ -24,18 +24,13 @@ class AuthController extends BaseController {
 			'password' => Input::get('password')
 		);
 
-		try
+		if (Auth::attempt($credentials, true))
 		{
-			$user = Sentry::authenticateAndRemember($credentials, false);
-
-			if ($user)
-			{
-				return Redirect::route('reservations');
-			}
+			return Redirect::route('reservations');
 		}
-		catch(\Exception $e)
+		else
 		{
-			return Redirect::route('login')->withErrors(array('login' => $e->getMessage()));
+			return Redirect::route('login')->withErrors(array('login' => 'Login failed'));
 		}
 	}
 
@@ -45,7 +40,7 @@ class AuthController extends BaseController {
 	 */
 	public function getLogout()
 	{
-		Sentry::logout();
+		Auth::logout();
 
 		return Redirect::route('login');
 	}

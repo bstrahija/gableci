@@ -1,6 +1,6 @@
 <div class="hook" id="hook"></div>
 
-@if (Sentry::check())
+@if (Auth::check())
 	<header>
 		<div class="wrap">
 			@if (isset($flyer) and $flyer)

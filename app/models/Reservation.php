@@ -17,7 +17,7 @@ class Reservation extends \Eloquent {
 	{
 		$myReservation = Reservation::where('created_at', '>=', date('Y-m-d') . ' 00:00:00')
 		                            ->where('created_at', '<=', date('Y-m-d') . ' 23:59:59')
-		                            ->where('user_id', \Sentry::getUser()->id)
+		                            ->where('user_id', \Auth::user()->id)
 		                            ->first();
 
 		return $myReservation;

@@ -35,7 +35,7 @@ App::after(function($request, $response)
 
 Route::filter('auth', function()
 {
-	if ( ! Sentry::check())
+	if ( ! Auth::check())
 	{
 		if ( ! Request::ajax()) return Redirect::route('login');
 		else                    return Response::json(array('error' => 'forbidden'), 401);
@@ -61,7 +61,7 @@ Route::filter('auth.basic', function()
 
 Route::filter('guest', function()
 {
-	if (Sentry::check()) return Redirect::to('/');
+	if (Auth::check()) return Redirect::to('/');
 });
 
 /*
