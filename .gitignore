@@ -1,6 +1,7 @@
 /app/database/seeds/SentrySeederReal.php
 /app/database/local.sqlite
 /app/config/production
+/app/config/local
 /app/storage/*
 /bootstrap/compiled.php
 /vendor
@@ -8,3 +9,4 @@ composer.phar
 composer.lock
 .DS_Store
 *.pyc
+*.env
