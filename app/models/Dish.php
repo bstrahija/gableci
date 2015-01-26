@@ -66,6 +66,7 @@ class Dish extends \Eloquent {
 			// Create if missing
 			if ( ! $dish)
 			{
+				// default is empty
 				$dish = new Dish;
 				$dish->code = $code;
 				$dish->save();
@@ -77,6 +78,46 @@ class Dish extends \Eloquent {
 		              ->where('created_at', '<=', date('Y-m-d') . ' 23:59:59')
 		              ->orderBy('code')
 		              ->get();
+
+		// Parse from pdf?
+		$parse = true;
+		foreach ($dishes as $value)
+		{
+			if ($value->created_at->format('U') != $value->updated_at->format('U'))
+			{
+				$parse = false;
+			}
+		}
+
+		// Parse from pdf!
+		if ($parse)
+		{
+			try
+			{
+				exec('python ' . app_path() . '/python/gastrocom/parser.py', $output);
+
+				if (isset($output[0]))
+				{
+					$json = json_decode($output[0]);
+					foreach ($json->menu as $menu)
+					{
+						self::where('created_at', '>=', date('Y-m-d') . ' 00:00:00')
+						    ->where('created_at', '<=', date('Y-m-d') . ' 23:59:59')
+						    ->where('code', '=', $menu->id + 1)
+						    ->update(array('title' => str_replace("\n", '; ', $menu->desc), 'price' => $menu->price));
+					}
+
+					$dishes = self::where('created_at', '>=', date('Y-m-d') . ' 00:00:00')
+					              ->where('created_at', '<=', date('Y-m-d') . ' 23:59:59')
+					              ->orderBy('code')
+					              ->get();
+				}
+			}
+			catch(\Exception $e)
+			{
+				Log::error("Failed to execute python script.", array('DISH MODEL'));
+			}
+		}
 
 		return $dishes;
 	}

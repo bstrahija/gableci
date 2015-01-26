@@ -8,7 +8,8 @@ class Lunch {
 	 * URL to garestin web page with flyers
 	 * @var string
 	 */
-	protected $url = 'http://www.gastrocom-ugostiteljstvo.com/index.php?content=Gableci_Garestin';
+	//protected $url = 'http://www.gastrocom-ugostiteljstvo.com/index.php?content=Gableci_Garestin';
+	protected $url = 'http://www.gastrocom-ugostiteljstvo.com/gableci.html';
 
 	/**
 	 * Goutte client
@@ -95,16 +96,68 @@ class Lunch {
 	{
 		if ( ! Cache::has('flyers'))
 		{
-			// Fetch page content
-			$this->client  = new Client();
-			$this->crawler = $this->client->request('GET', $this->url);
-			$container     = $this->crawler->filter(".tekst");
-			$html          = $container->html();
-			$dom           = new \DomDocument();
-			Log::debug("Fetching from url: " . $this->url, array('LUNCH SERVICE'));
-
 			try
 			{
+				$this->client  = new Client();
+				$this->crawler = $this->client->request('GET', $this->url);
+				$html          = $this->crawler->html();
+
+				preg_match_all('/\<a .*download=[^\>]+\>/', $html, $anchors);
+				foreach ($anchors[0] as $anchor)
+				{
+					preg_match('/ href="([^"]+)"/', $anchor, $href);
+					if (isset($href[1]))
+					{
+						preg_match('/DNEVNI_MENU_([0-9]+).([0-9]+)._Garestin.pdf/', $href[1], $date);
+						if (isset($date[2]))
+						{
+							$date = $date[1] . '.' . $date[2] . '.';
+							$href = dirname($this->url) . $href[1];
+							// to do: relative/absolute path check
+
+							$this->flyers[$date] = array('href' => $href);
+						}
+					}
+				}
+			}
+			catch(\Exception $e)
+			{
+				Log::error("Failed to scrape url: " . $this->url, array('LUNCH SERVICE'));
+			}
+
+			// Cache the results
+			if ($this->flyers)
+			{
+				Cache::put('flyers', $this->flyers, 60*3);
+			}
+		}
+		else
+		{
+			$this->flyers = Cache::get('flyers');
+		}
+
+		return $this->flyers;
+	}
+
+	/**
+	 * Scrapes the page and gets all URLs for flyers
+	 * @return array
+	 */
+	/* ...depricated
+	public function scrape()
+	{
+		if ( ! Cache::has('flyers'))
+		{
+			try
+			{
+				// Fetch page content
+				$this->client  = new Client();
+				$this->crawler = $this->client->request('GET', $this->url);
+				$container     = $this->crawler->filter(".tekst");
+				$html          = $container->html();
+				$dom           = new \DomDocument();
+				Log::debug("Fetching from url: " . $this->url, array('LUNCH SERVICE'));
+
 				$dom->loadHTML($html);
 				$urls = $dom->getElementsByTagName('a');
 				$imgs = $dom->getElementsByTagName('img');
@@ -163,5 +216,5 @@ class Lunch {
 
 		return $this->flyers;
 	}
-
+	*/
 }

@@ -4,7 +4,7 @@
 	<header>
 		<div class="wrap">
 			@if (isset($flyer) and $flyer)
-				<a href="{{ $flyer['href'] }}" class="lightbox dish-menu"><i class="glyphicon glyphicon-picture"></i> Meni</a>
+				<a href="{{ $flyer['href'] }}" target="_blank" class="lightbox dish-menu"><i class="glyphicon glyphicon-picture"></i> Meni</a>
 			@else
 				<a href="#" class="dish-menu dish-menu-missing" title="Greška!"><i class="glyphicon glyphicon-ban-circle"></i> Meni</a>
 			@endif
