@@ -66,6 +66,7 @@ class Dish extends \Eloquent {
 			// Create if missing
 			if ( ! $dish)
 			{
+				// Default is empty
 				$dish = new Dish;
 				$dish->code = $code;
 				$dish->save();

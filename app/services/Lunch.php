@@ -1,6 +1,7 @@
 <?php namespace App\Services;
 
 use Cache, Carbon\Carbon, Goutte\Client, Log;
+use App\Models\Dish;
 
 class Lunch {
 
@@ -8,7 +9,7 @@ class Lunch {
 	 * URL to garestin web page with flyers
 	 * @var string
 	 */
-	protected $url = 'http://www.gastrocom-ugostiteljstvo.com/index.php?content=Gableci_Garestin';
+	protected $url = 'http://www.gastrocom-ugostiteljstvo.com/gableci.html';
 
 	/**
 	 * Goutte client
@@ -33,7 +34,14 @@ class Lunch {
 	 */
 	public function __construct()
 	{
-		if ( ! $this->flyers) $this->scrape();
+		if ( ! $this->flyers)
+		{
+			// Scrape web page
+			$this->scrape();
+
+			// Also try to update dishes
+			$this->updateDishesFromPdf();
+		}
 	}
 
 	/**
@@ -93,56 +101,31 @@ class Lunch {
 	 */
 	public function scrape()
 	{
+		Cache::forget('flyers');
 		if ( ! Cache::has('flyers'))
 		{
 			try
 			{
-				// Fetch page content
 				$this->client  = new Client();
 				$this->crawler = $this->client->request('GET', $this->url);
-				$container     = $this->crawler->filter(".tekst");
-				$html          = $container->html();
-				$dom           = new \DomDocument();
-				Log::debug("Fetching from url: " . $this->url, array('LUNCH SERVICE'));
+				$html          = $this->crawler->html();
 
-				$dom->loadHTML($html);
-				$urls = $dom->getElementsByTagName('a');
-				$imgs = $dom->getElementsByTagName('img');
-
-				// Find URL's first
-				foreach ($urls as $url)
+				preg_match_all('/\<a .*download=[^\>]+\>/', $html, $anchors);
+				foreach ($anchors[0] as $anchor)
 				{
-					$href         = $url->getAttribute('href');
-					$dateStartPos = strrpos($href, 'DNEVNI%20MENU%20') + strlen('DNEVNI%20MENU%20');
-					$date         = substr($href, $dateStartPos, 6);
-
-					if ( ! (int) $date)
+					preg_match('/ href="([^"]+)"/', $anchor, $href);
+					if (isset($href[1]))
 					{
-						$dateStartPos = strrpos($href, 'GARESTIN%20') + strlen('GARESTIN%20');
-						$date         = substr($href, $dateStartPos, 6);
+						preg_match('/DNEVNI_MENU_([0-9]+).([0-9]+)._Garestin.pdf/', $href[1], $date);
+						if (isset($date[2]))
+						{
+							$date = $date[1] . '.' . $date[2] . '.';
+							$href = dirname($this->url) . $href[1];
+							// to do: relative/absolute path check
+
+							$this->flyers[$date] = array('href' => $href);
+						}
 					}
-
-					// Add to list
-					$this->flyers[$date] = array('href' => $href);
-				}
-
-				// echo '<pre>'; print_r("==================================================="); echo '</pre>';
-				// echo '<pre>'; print_r("==================================================="); echo '</pre>';
-
-				foreach ($imgs as $img)
-				{
-					$src          = $img->getAttribute('src');
-					$dateStartPos = strrpos($src, 'DNEVNI%20MENU%20') + strlen('DNEVNI%20MENU%20');
-					$date         = substr($src, $dateStartPos, 6);
-
-					if ( ! (int) $date)
-					{
-						$dateStartPos = strrpos($src, 'GARESTIN%20') + strlen('GARESTIN%20');
-						$date         = substr($src, $dateStartPos, 6);
-					}
-
-					// Add to list
-					$this->flyers[$date]['src'] = $src;
 				}
 			}
 			catch(\Exception $e)
@@ -162,6 +145,64 @@ class Lunch {
 		}
 
 		return $this->flyers;
+	}
+
+	/**
+	 * Parse PDF and update dishes
+	 *
+	 * @param  Collection $dishes
+	 * @return void
+	 */
+	public function updateDishesFromPdf($dishes = null)
+	{
+		if ( ! $dishes) $dishes = Dish::getForToday();
+
+		// Get todays flyer
+		$flyer = $this->flyer();
+
+		// Parse from pdf?
+		$parse = true;
+		foreach ($dishes as $value)
+		{
+			if ($value->created_at->format('U') != $value->updated_at->format('U'))
+			{
+				$parse = false;
+			}
+		}
+
+		// Parse from pdf!
+		if ($parse and isset($flyer['href']))
+		{
+			try
+			{
+				$command = 'python ' . app_path() . '/python/gastrocom/parser.py --url=' . $flyer['href'];
+				exec($command, $output);
+
+				if (isset($output[0]))
+				{
+					$json = json_decode($output[0]);
+
+					foreach ($json->menu as $key => $menu)
+					{
+						$code = $key + 1;
+						$dish = Dish::getByCode($code);
+
+						// Update dish info
+						if ($dish and $menu and is_object($menu))
+						{
+							$dish->title = str_replace("\n", ", ", object_get($menu, 'desc'));
+							$dish->price = (int) object_get($menu, 'price');
+							$dish->save();
+						}
+					}
+				}
+			}
+			catch(\Exception $e)
+			{
+				Log::error("Failed to execute python script.", array('DISH MODEL'));
+				echo '<pre>'; print_r(var_dump($e)); echo '</pre>';
+			}
+		}
 	}
 
 }

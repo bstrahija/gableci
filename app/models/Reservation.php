@@ -1,7 +1,5 @@
 <?php namespace App\Models;
 
-use Dish;
-
 class Reservation extends \Eloquent {
 
 	public $table = 'reservations';
