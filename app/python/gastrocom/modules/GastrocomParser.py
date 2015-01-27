@@ -10,6 +10,10 @@ This library requires pdfminer.
 You can install it using pip:
 >> sudo pip install pdfminer
 
+If pip (python package manager)
+is missing just do:
+>> sudo apt-get install python-pip
+
 '''
 
 import sys, os, re, datetime, json, requests
@@ -24,24 +28,15 @@ class GastrocomParser():
 
 	### private variables
 	__url = None
-	__byte = None
+	__binary = None
 	__plain = None
 	__object = None
 	__error = None
 
-	### regex config
-	__re_date = r'(\d{2})[/.-](\d{2})[/.-](\d{4})[/.-]?'
-	__re_menu = r'MENU[^\n]+'
-	__re_price = r'([0-9\,\.]+)'
-
-	### numeric format config (decimal/thousand separator)
-	__num_decimal = ','
-	__num_thousand = ''
-
 	### constructor
 	def __init__(self, url):
 		self.__url = url
-		self.__byte = self.__get_byte()
+		self.__binary = self.__get_binary()
 		self.__plain = self.__get_plain()
 		self.__object = self.__get_object()
 
@@ -54,8 +49,8 @@ class GastrocomParser():
 
 		return result
 
-	### read bytes in file (url)
-	def __get_byte(self):
+	### read binarys in file (url)
+	def __get_binary(self):
 		result = None
 		url = self.__url_fixed()
 
@@ -82,7 +77,7 @@ class GastrocomParser():
 
 		if self.__error is None:
 			try:
-				strio = StringIO(self.__byte)
+				strio = StringIO(self.__binary)
 				rsrcmgr = PDFResourceManager()
 				retstr = StringIO()
 				device = TextConverter(rsrcmgr, retstr, codec='utf-8', laparams=LAParams())
@@ -102,53 +97,104 @@ class GastrocomParser():
 	### parse pdf text
 	def __get_object(self):
 		result = {}
-		result['date'] = None
-		result['menu'] = []
-
-		if self.__error is None:
-			try:
-				match = re.search(self.__re_date, self.__plain)
-				if match is not None:
-					result['date'] = str(datetime.date(*(map(int, match.groups()[-1::-1]))))
-
-				menues = re.split(self.__re_menu, self.__plain)
-				if menues is None:
-					menues = []
-				if len(menues) != 1:
-					del menues[0]
-				for i,menu in enumerate(menues):
-					result['menu'].append(menu)
-
-				for i,menu in enumerate(result['menu']):
-					txt = menu.strip()
-					arr = txt.split('Cijena')
-					desc = arr[0]
-					price = None
-
-					match = re.search(self.__re_price, '' if len(arr) < 2 else arr[1])
-					if match is not None:
-						price = match.groups(1)[0]
-						try:
-							if bool(self.__num_thousand):
-								price = price.replace(self.__num_thousand, '{THOUSAND}')
-							if bool(self.__num_decimal):
-								price = price.replace(self.__num_decimal, '{DECIMAL}')
-							price = price.replace('{THOUSAND}', '').replace('{DECIMAL}', '.')
-							price = float(price)
-						except Exception, e:
-							price = None
-
-					result['menu'][i] = {
-						'id': i,
-						'desc': re.sub('\n+', '\n', desc.strip()),
-						'price': price
-					}
-
-			except Exception, e:
-				result = None
-				self.__error = str(e)
+		result['date'] = self.__re_date()
+		result['menu'] = self.__re_menu()
 
 		return result
+
+	### extract date from text
+	def __re_date(self):
+		if not self.__error is None:
+			return None
+
+		regex = r'(\d{2})[/.-](\d{2})[/.-](\d{4})[/.-]?'
+		match = re.search(regex, self.__plain)
+		result = None
+
+		if match is not None:
+			try:
+				result = str(datetime.date(*(map(int, match.groups()[-1::-1]))))
+			except Exception, e:
+				result = None
+
+		return result
+
+	### extract menu from text
+	def __re_menu(self):
+		if not self.__error is None:
+			return None
+
+		regex = r'\|MENU ([^\|]+)(.*?)Cijena:([^\|]+)'
+		match = re.findall(regex, self.__plain.replace('\n', '|'))
+		result = []
+
+		if match is None:
+			match = []
+
+		for menu in match:
+			if menu is not None:
+				item = {
+					'id': None,
+					'desc': None,
+					'price': None
+				}
+
+				if len(menu) >= 1:
+					item['id'] = self.__fix_id(menu[0])
+				if len(menu) >= 2:
+					item['desc'] = self.__fix_desc(menu[1])
+				if len(menu) >= 3:
+					item['price'] = self.__fix_price(menu[2])
+
+				result.append(item)
+
+		return result
+
+	### conver roman numeral to int
+	def __fix_id(self, value):
+		value = re.sub('\|+', '\n', value)
+		value = value.replace(' ', '')
+		value = value.strip()
+
+		if value.upper() == 'I': value = 1
+		elif value.upper() == 'II': value = 2
+		elif value.upper() == 'III': value = 3
+		elif value.upper() == 'IV': value = 4
+		elif value.upper() == 'V': value = 5
+		elif value.upper() == 'VI': value = 6
+		elif value.upper() == 'VII': value = 7
+		elif value.upper() == 'VIII': value = 8
+		elif value.upper() == 'IX': value = 9
+		elif value.upper() == 'X': value = 10
+		else: value = None
+
+		return value
+
+	### trim and remove repeating newlines
+	def __fix_desc(self, value):
+		value = re.sub('\|+', '\n', value)
+		value = value.strip()
+
+		return value
+
+	### convert str to float
+	def __fix_price(self, value):
+		separator_decimal = ','
+		separator_thousand = ''
+
+		value = re.sub('[^\d.,]+', '', value)
+		if bool(separator_thousand):
+			value = value.replace(separator_thousand, '{THOUSAND}')
+		if bool(separator_decimal):
+			value = value.replace(separator_decimal, '{DECIMAL}')
+		value = value.replace('{THOUSAND}', '').replace('{DECIMAL}', '.')
+
+		try:
+			value = float(value)
+		except Exception, e:
+			value = None
+
+		return value
 
 	### get url
 	def url(self):
@@ -159,8 +205,8 @@ class GastrocomParser():
 		return self.__error
 
 	### get file content
-	def byte(self):
-		return self.__byte
+	def binary(self):
+		return self.__binary
 
 	### get plain text from pdf file
 	def plain(self):

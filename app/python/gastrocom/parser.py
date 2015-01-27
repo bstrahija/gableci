@@ -10,6 +10,7 @@ if __name__ == '__main__':
 	# arguments
 	_url = None
 	_prettify = None
+	_plain = None
 
 	# display help
 	def __help():
@@ -28,13 +29,14 @@ if __name__ == '__main__':
 
 	# set defaults
 	def __defaults():
-		global _url, _prettify
+		global _url, _prettify, _plain
 		_url = 'http://www.gastrocom-ugostiteljstvo.com/media/k2/attachments/DNEVNI_MENU_{day}.{month}._Garestin.pdf'
 		_prettify = False
+		_plain = False
 
 	# get arguments
 	def __args():
-		global _url, _prettify
+		global _url, _prettify, _plain
 
 		if len(sys.argv) <= 0:
 			__help()
@@ -52,6 +54,8 @@ if __name__ == '__main__':
 				__error('Wrong use of --prettify argument.', 1003)
 			elif argv[:10] == '--prettify':
 				_prettify = True
+			elif argv[:10] == '--plain':
+				_plain = True
 			else:
 				pass
 
@@ -72,7 +76,13 @@ if __name__ == '__main__':
 
 		parser = GastrocomParser.GastrocomParser(_url)
 		error = parser.error()
-		print parser.json(_prettify)
+		if _plain:
+			if error is None:
+				print parser.plain()
+			else:
+				print error
+		else:
+			print parser.json(_prettify)
 		del parser
 
 		exit(0 if error is None else 1000)
