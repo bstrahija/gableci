@@ -63,4 +63,16 @@ class ReservationsController extends BaseController {
 		return Redirect::route('reservations');
 	}
 
+	/**
+	 * Rescrape todays menus
+	 *
+	 * @return Response
+	 */
+	public function scrape()
+	{
+		$data = Lunch::flyer();
+
+		return $data;
+	}
+
 }
