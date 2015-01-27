@@ -24,4 +24,5 @@ Route::group(array('before' => 'auth'), function()
 	Route::controller('reservations', 'App\Controllers\ReservationsController');
 	Route::controller('stats', 'App\Controllers\StatsController');
 	Route::resource('dishes', 'App\Controllers\DishesController');
+	Route::resource('scrape', 'App\Controllers\ReservationsController@scrape');
 });
