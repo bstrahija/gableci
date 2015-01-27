@@ -183,15 +183,18 @@ class Lunch {
 
 					foreach ($json->menu as $key => $menu)
 					{
-						$code = $key + 1;
-						$dish = Dish::getByCode($code);
-
-						// Update dish info
-						if ($dish and $menu and is_object($menu))
+						if ($menu and is_object($menu))
 						{
-							$dish->title = str_replace("\n", ", ", object_get($menu, 'desc'));
-							$dish->price = (int) object_get($menu, 'price');
-							$dish->save();
+							$code = (int) object_get($menu, 'id');
+							$dish = Dish::getByCode($code);
+
+							// Update dish info
+							if ($dish)
+							{
+								$dish->title = str_replace("\n", ", ", object_get($menu, 'desc'));
+								$dish->price = (int) object_get($menu, 'price');
+								$dish->save();
+							}
 						}
 					}
 				}

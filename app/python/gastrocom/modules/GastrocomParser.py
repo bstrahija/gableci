@@ -100,6 +100,9 @@ class GastrocomParser():
 		result['date'] = self.__re_date()
 		result['menu'] = self.__re_menu()
 
+		if result['menu'] is not None:
+			result['menu'] = sorted(result['menu'], key=lambda k: (k['id']))
+
 		return result
 
 	### extract date from text
