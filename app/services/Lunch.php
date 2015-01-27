@@ -199,7 +199,6 @@ class Lunch {
 			catch(\Exception $e)
 			{
 				Log::error("Failed to execute python script.", array('DISH MODEL'));
-				echo '<pre>'; print_r(var_dump($e)); echo '</pre>';
 			}
 		}
 	}
