@@ -5,7 +5,7 @@
 		<ul>
 			@foreach ($overview as $entry)
 				<li>
-					<strong>{{ $entry['count'] }}</strong> x
+					<strong>{{ $entry['count'] }} <i class="glyphicon glyphicon-user"></i></strong> x
 					<em class="code"><i class="glyphicon glyphicon-cutlery"></i> {{ $entry['dish'] }}</em>
 					<em class="dish">{{ $entry['title'] }}</em>
 					<span class="price">{{ $entry['price'] }} kn</span>
