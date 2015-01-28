@@ -35,33 +35,23 @@ class GastrocomParser():
 
 	### constructor
 	def __init__(self, url):
-		self.__url = url
+		self.__url = self.__fix_url(url)
 		self.__binary = self.__get_binary()
 		self.__plain = self.__get_plain()
 		self.__object = self.__get_object()
 
-	### convert url to absolute file path (if necessary)
-	def __url_fixed(self):
-		result = self.__url
-		if len(result.split('://')) == 1:
-			if result[0] != '/':
-				result = os.path.realpath(os.path.dirname(os.path.realpath(sys.path[0])) + '/' + result)
-
-		return result
-
 	### read binarys in file (url)
 	def __get_binary(self):
 		result = None
-		url = self.__url_fixed()
 
 		if self.__error is None:
 			try:
-				if len(url.split('://')) == 1:
-					f = open(url, 'r')
+				if len(self.__url.split('://')) == 1:
+					f = open(self.__url, 'r')
 					result = f.read()
 					f.close()
 				else:
-					request = requests.get(url, stream=True)
+					request = requests.get(self.__url, stream=True)
 					raw = request.raw
 					result = raw.read()
 					del request
@@ -97,6 +87,7 @@ class GastrocomParser():
 	### parse pdf text
 	def __get_object(self):
 		result = {}
+		result['error'] = self.__error;
 		result['date'] = self.__re_date()
 		result['menu'] = self.__re_menu()
 
@@ -127,8 +118,8 @@ class GastrocomParser():
 		if not self.__error is None:
 			return None
 
-		regex = r'\|MENU ([^\|]+)(.*?)Cijena:([^\|]+)'
-		match = re.findall(regex, self.__plain.replace('\n', '|'))
+		regex = r'MENU (.*)([\s\S]*?)Cijena: (.*)'
+		match = re.findall(regex, self.__plain)
 		result = []
 
 		if match is None:
@@ -153,9 +144,17 @@ class GastrocomParser():
 
 		return result
 
+	### convert url to absolute file path (if necessary)
+	def __fix_url(self, value):
+		if len(value.split('://')) == 1:
+			if value[0] != '/':
+				value = os.path.realpath(os.path.dirname(os.path.realpath(sys.path[0])) + '/' + value)
+
+		return value
+
 	### conver roman numeral to int
 	def __fix_id(self, value):
-		value = re.sub('\|+', '\n', value)
+		value = re.sub('\n+', '\n', value)
 		value = value.replace(' ', '')
 		value = value.strip()
 
@@ -175,7 +174,7 @@ class GastrocomParser():
 
 	### trim and remove repeating newlines
 	def __fix_desc(self, value):
-		value = re.sub('\|+', '\n', value)
+		value = re.sub('\n+', '\n', value)
 		value = value.strip()
 
 		return value
@@ -217,13 +216,7 @@ class GastrocomParser():
 
 	### get parsed object from pdf text
 	def object(self):
-		result = {}
-		if self.__error is not None:
-			result['error'] = self.__error
-		else:
-			result = self.__object
-
-		return result
+		return self.__object
 
 	### get object as json
 	def json(self, pretty=False):
