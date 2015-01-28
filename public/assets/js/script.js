@@ -30,7 +30,8 @@ $(function() {
 		closeClick: true,
 		closeBtn: false,
 		openSpeed: 200,
-		closeSpeed: 100
+		closeSpeed: 100,
+		type: 'iframe'
 	});
 
 	// Auto refresh reservations
