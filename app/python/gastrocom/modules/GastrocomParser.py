@@ -212,26 +212,6 @@ class GastrocomParser():
 
 		return result
 
-		if match is None:
-			match = []
-
-		for menu in match:
-			if menu is not None:
-				item = {
-					'id': None,
-					'desc': None,
-					'price': None
-				}
-
-				if len(menu) >= 1:
-					item['id'] = self.__fix_id(menu[0])
-				if len(menu) >= 2:
-					item['desc'] = self.__fix_desc(menu[1])
-				if len(menu) >= 3:
-					item['price'] = self.__fix_price(menu[2])
-
-				result.append(item)
-
 	### convert url to absolute file path (if necessary)
 	def __fix_url(self, value):
 		if len(value.split('://')) == 1:
