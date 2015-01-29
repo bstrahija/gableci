@@ -90,6 +90,7 @@ class GastrocomParser():
 		result['error'] = self.__error;
 		result['date'] = self.__re_date()
 		result['menu'] = self.__re_menu()
+		result['special'] = self.__re_special()
 
 		if result['menu'] is not None:
 			result['menu'] = sorted(result['menu'], key=lambda k: (k['id']))
@@ -113,12 +114,12 @@ class GastrocomParser():
 
 		return result
 
-	### extract menu from text
+	'''
+	### extract menu from text - depricated
 	def __re_menu(self):
 		if not self.__error is None:
 			return None
 
-		'''
 		regex = r'MENU (.*)([\s\S]*?)Cijena: (.*)'
 		match = re.findall(regex, self.__plain)
 		result = []
@@ -142,7 +143,12 @@ class GastrocomParser():
 					item['price'] = self.__fix_price(menu[2])
 
 				result.append(item)
-		'''
+	'''
+
+	### extract menu from text
+	def __re_menu(self):
+		if not self.__error is None:
+			return None
 
 		# plain text
 		plain = self.__plain
@@ -189,6 +195,42 @@ class GastrocomParser():
 
 		# that's it, we're done...
 		return result
+
+	### extract specials from text
+	def __re_special(self):
+		if not self.__error is None:
+			return None
+
+		match = re.split('POSEBNO VAM PREPORUČAMO:', self.__plain, 1)
+		result = []
+		#print match
+
+		if len(match) == 2:
+			for line in match[1].split('\n'):
+				if line.strip() != '':
+					result.append(line.strip())
+
+		return result
+
+		if match is None:
+			match = []
+
+		for menu in match:
+			if menu is not None:
+				item = {
+					'id': None,
+					'desc': None,
+					'price': None
+				}
+
+				if len(menu) >= 1:
+					item['id'] = self.__fix_id(menu[0])
+				if len(menu) >= 2:
+					item['desc'] = self.__fix_desc(menu[1])
+				if len(menu) >= 3:
+					item['price'] = self.__fix_price(menu[2])
+
+				result.append(item)
 
 	### convert url to absolute file path (if necessary)
 	def __fix_url(self, value):
