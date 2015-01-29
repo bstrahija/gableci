@@ -108,7 +108,7 @@ class GastrocomParser():
 
 		if match is not None:
 			try:
-				result = str(datetime.date(*(map(int, match.groups()[-1::-1]))))
+				result = datetime.datetime(*(map(int, match.groups()[-1::-1]))).isoformat()
 			except Exception, e:
 				result = None
 
