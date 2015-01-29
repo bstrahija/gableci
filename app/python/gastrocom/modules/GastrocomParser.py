@@ -207,8 +207,9 @@ class GastrocomParser():
 
 		if len(match) == 2:
 			for line in match[1].split('\n'):
-				if line.strip() != '':
-					result.append(line.strip())
+				value = self.__fix_desc(line)
+				if value != '':
+					result.append(value)
 
 		return result
 
@@ -242,8 +243,18 @@ class GastrocomParser():
 
 	### trim and remove repeating newlines
 	def __fix_desc(self, value):
-		value = re.sub('\n+', '\n', value)
-		value = value.strip()
+		def toLowercase(match):
+			return ' ' + match.group(1).lower()
+
+		value = unicode(value, 'utf-8')
+		value = re.sub(r'(\n+)([A-Z])', lambda pattern: ', ' + pattern.group(2).lower(), value)
+		value = re.sub(r'^\*', '', value)
+		value = re.sub(ur'^\u00b7', '', value)
+		value = re.sub(ur'\u2013', '-', value)
+		value = re.sub(r'-', ' - ', value)
+		value = re.sub(r'\s+', ' ', value)
+		value = value.strip(', ')
+		value = value.capitalize()
 
 		return value
 
