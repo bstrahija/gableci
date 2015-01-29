@@ -118,6 +118,7 @@ class GastrocomParser():
 		if not self.__error is None:
 			return None
 
+		'''
 		regex = r'MENU (.*)([\s\S]*?)Cijena: (.*)'
 		match = re.findall(regex, self.__plain)
 		result = []
@@ -141,7 +142,52 @@ class GastrocomParser():
 					item['price'] = self.__fix_price(menu[2])
 
 				result.append(item)
+		'''
 
+		# plain text
+		plain = self.__plain
+
+		# remove logo
+		plain = plain.replace('G a\n\nr\n\ne\n\nsti n\n\npansion-restoran\n\ndnevni\n\n', '')
+		plain = plain.replace('G a\n\nr\n\ne\n\nsti n\n\npansion-restoran\n\n', '')
+
+		# remove all before date
+		regex = r'\d{2}[/.-]\d{2}[/.-]\d{4}[/.-]?'
+		match = re.split(regex, plain, 1)
+		if len(match) == 2:
+			plain = match[1]
+
+		# find regex pattern: {desc}MENU {id}{desc}Cijena: {price}
+		regex = r'([\s\S]*?)\nMENU (.*)([\s\S]*?)Cijena: (.*)'
+		match = re.findall(regex, plain)
+		result = []
+
+		# found nothing?
+		if match is None:
+			match = []
+
+		# loop all
+		for menu in match:
+			if menu is not None:
+				# defaults
+				item = {
+					'id': None,
+					'desc': None,
+					'price': None
+				}
+
+				# fix values
+				if len(menu) >= 1:
+					item['id'] = self.__fix_id(menu[1])
+				if len(menu) >= 2:
+					item['desc'] = self.__fix_desc(menu[0] + menu[2])
+				if len(menu) >= 3:
+					item['price'] = self.__fix_price(menu[3])
+
+				# append result
+				result.append(item)
+
+		# that's it, we're done...
 		return result
 
 	### convert url to absolute file path (if necessary)
