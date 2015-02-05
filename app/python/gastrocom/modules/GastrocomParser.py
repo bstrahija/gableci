@@ -157,11 +157,9 @@ class GastrocomParser():
 		plain = plain.replace('G a\n\nr\n\ne\n\nsti n\n\npansion-restoran\n\ndnevni\n\n', '')
 		plain = plain.replace('G a\n\nr\n\ne\n\nsti n\n\npansion-restoran\n\n', '')
 
-		# remove all before date
-		regex = r'\d{2}[/.-]\d{2}[/.-]\d{4}[/.-]?'
-		match = re.split(regex, plain, 1)
-		if len(match) == 2:
-			plain = match[1]
+		# remove date and day of week
+		regex = r'.*\n\d{2}[/.-]\d{2}[/.-]\d{4}[/.-]?'
+		plain = '\n' + re.sub(regex, '', plain)
 
 		# find regex pattern: {desc}MENU {id}{desc}Cijena: {price}
 		regex = r'([\s\S]*?)\nMENU (.*)([\s\S]*?)Cijena: (.*)'
@@ -172,26 +170,10 @@ class GastrocomParser():
 		if match is None:
 			match = []
 
-		# loop all
+		# loop all and append menu to result
 		for menu in match:
 			if menu is not None:
-				# defaults
-				item = {
-					'id': None,
-					'desc': None,
-					'price': None
-				}
-
-				# fix values
-				if len(menu) >= 1:
-					item['id'] = self.__fix_id(menu[1])
-				if len(menu) >= 2:
-					item['desc'] = self.__fix_desc(menu[0] + menu[2])
-				if len(menu) >= 3:
-					item['price'] = self.__fix_price(menu[3])
-
-				# append result
-				result.append(item)
+				result.append({ 'id': self.__fix_id(menu[1]), 'desc': self.__fix_desc(menu[0] + menu[2]), 'price': self.__fix_price(menu[3]) })
 
 		# that's it, we're done...
 		return result
@@ -201,12 +183,12 @@ class GastrocomParser():
 		if not self.__error is None:
 			return None
 
-		match = re.split('POSEBNO VAM PREPORUČAMO:', self.__plain, 1)
+		regex = r'\nPOSEBNO VAM PREPORUČAMO:([\s\S]*?)(\nMENI|$)'
+		match = re.search(regex, self.__plain)
 		result = []
-		#print match
 
-		if len(match) == 2:
-			for line in match[1].split('\n'):
+		if match is not None:
+			for line in match.group(1).split('\n'):
 				value = self.__fix_desc(line)
 				if value != '':
 					result.append(value)
@@ -217,7 +199,7 @@ class GastrocomParser():
 	def __fix_url(self, value):
 		if len(value.split('://')) == 1:
 			if value[0] != '/':
-				value = os.path.realpath(os.path.dirname(os.path.realpath(sys.path[0])) + '/' + value)
+				value = os.path.realpath(os.getcwd() + '/' + value)
 
 		return value
 
@@ -243,11 +225,11 @@ class GastrocomParser():
 
 	### trim and remove repeating newlines
 	def __fix_desc(self, value):
-		def toLowercase(match):
-			return ' ' + match.group(1).lower()
-
 		value = unicode(value, 'utf-8')
 		value = re.sub(r'(\n+)([A-Z])', lambda pattern: ', ' + pattern.group(2).lower(), value)
+		value = re.sub(r'\s+,', ',', value)
+		value = re.sub(r', i ', ' i ', value, 0, re.IGNORECASE)
+		value = re.sub(r'\s+,', ',', value)
 		value = re.sub(r'^\*', '', value)
 		value = re.sub(ur'^\u00b7', '', value)
 		value = re.sub(ur'\u2013', '-', value)
