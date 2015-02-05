@@ -114,37 +114,6 @@ class GastrocomParser():
 
 		return result
 
-	'''
-	### extract menu from text - depricated
-	def __re_menu(self):
-		if not self.__error is None:
-			return None
-
-		regex = r'MENU (.*)([\s\S]*?)Cijena: (.*)'
-		match = re.findall(regex, self.__plain)
-		result = []
-
-		if match is None:
-			match = []
-
-		for menu in match:
-			if menu is not None:
-				item = {
-					'id': None,
-					'desc': None,
-					'price': None
-				}
-
-				if len(menu) >= 1:
-					item['id'] = self.__fix_id(menu[0])
-				if len(menu) >= 2:
-					item['desc'] = self.__fix_desc(menu[1])
-				if len(menu) >= 3:
-					item['price'] = self.__fix_price(menu[2])
-
-				result.append(item)
-	'''
-
 	### extract menu from text
 	def __re_menu(self):
 		if not self.__error is None:
@@ -223,10 +192,10 @@ class GastrocomParser():
 
 		return value
 
-	### trim and remove repeating newlines
+	### remove repeating newlines, lowercase, capitalize, trim
 	def __fix_desc(self, value):
 		value = unicode(value, 'utf-8')
-		value = re.sub(r'(\n+)([A-Z])', lambda pattern: ', ' + pattern.group(2).lower(), value)
+		value = re.sub(ur'(\n+)([A-Z\u010c\u0106\u017d\u0160\u0110])', lambda pattern: ', ' + pattern.group(2).lower(), value)
 		value = re.sub(r'\s+,', ',', value)
 		value = re.sub(r', i ', ' i ', value, 0, re.IGNORECASE)
 		value = re.sub(r'\s+,', ',', value)
@@ -236,7 +205,7 @@ class GastrocomParser():
 		value = re.sub(r'-', ' - ', value)
 		value = re.sub(r'\s+', ' ', value)
 		value = value.strip(', ')
-		value = value.capitalize()
+		value = value.lower().capitalize()
 
 		return value
 
