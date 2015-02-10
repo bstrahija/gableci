@@ -126,9 +126,13 @@ class GastrocomParser():
 		plain = plain.replace('G a\n\nr\n\ne\n\nsti n\n\npansion-restoran\n\ndnevni\n\n', '')
 		plain = plain.replace('G a\n\nr\n\ne\n\nsti n\n\npansion-restoran\n\n', '')
 
-		# remove date and day of week
+		# remove date
 		regex = r'.*\n\d{2}[/.-]\d{2}[/.-]\d{4}[/.-]?'
 		plain = '\n' + re.sub(regex, '', plain)
+
+		# remove day of week
+		regex = r'\n(Ponedjeljak|Utorak|Srijeda|Četvrtak|Petak|Subota|Nedjelja)\n'
+		plain = '\n' + re.sub(regex, '', plain).strip()
 
 		# find regex pattern: {desc}MENU {id}{desc}Cijena: {price}
 		regex = r'([\s\S]*?)\nMENU (.*)([\s\S]*?)Cijena: (.*)'
