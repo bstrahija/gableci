@@ -135,7 +135,7 @@ class GastrocomParser():
 		plain = '\n' + re.sub(regex, '', plain).strip()
 
 		# find regex pattern: {desc}MENU {id}{desc}Cijena: {price}
-		regex = r'([\s\S]*?)\nMENU (.*)([\s\S]*?)Cijena: (.*)'
+		regex = r'([\s\S]*?)\nMENU (.*)([\s\S]*?)C.*en.*: (.*)'
 		match = re.findall(regex, plain)
 		result = []
 
